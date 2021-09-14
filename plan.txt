@@ -1,0 +1,7 @@
+Experiments
+- MNIST and MNIST Fashion (Dense)
+- MNIST and MNIST Fashion (Convolutional)
+- MNIST and MNIST Fashion and Boston Housing (Dense)
+- Twin MNIST Fashion
+- CIFAR 10 and MNIST and MNIST Fashion
+- Easy and Difficult split out

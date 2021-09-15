@@ -5,6 +5,9 @@ import mann
 
 if __name__ == '__main__':
 
+    HIDDEN_LAYERS = 7
+    HIDDEN_NODES = 1000
+    
     (digit_x_train, digit_y_train), (digit_x_test, digit_y_test) = tf.keras.datasets.mnist.load_data()
     digit_x_train = digit_x_train.reshape((digit_x_train.shape[0], -1))/255
     digit_x_test = digit_x_test.reshape((digit_x_test.shape[0], -1))/255
@@ -20,9 +23,9 @@ if __name__ == '__main__':
     )
 
     input_layer = tf.keras.layers.Input(digit_x_train.shape[-1])
-    x = tf.keras.layers.Dense(100, activation = 'relu')(input_layer)
-    for _ in range(4):
-        x = tf.keras.layers.Dense(100, activation = 'relu')(x)
+    x = tf.keras.layers.Dense(HIDDEN_NODES, activation = 'relu')(input_layer)
+    for _ in range(HIDDEN_LAYERS - 1):
+        x = tf.keras.layers.Dense(HIDDEN_NODES, activation = 'relu')(x)
     output_layer = tf.keras.layers.Dense(10, activation = 'softmax')(x)
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
@@ -33,9 +36,9 @@ if __name__ == '__main__':
     print(classification_report(digit_y_test, digit_preds))
 
     input_layer = tf.keras.layers.Input(fashion_x_train.shape[-1])
-    x = tf.keras.layers.Dense(100, activation = 'relu')(input_layer)
-    for _ in range(4):
-        x = tf.keras.layers.Dense(100, activation = 'relu')(x)
+    x = tf.keras.layers.Dense(HIDDEN_NODES, activation = 'relu')(input_layer)
+    for _ in range(HIDDEN_LAYERS - 1):
+        x = tf.keras.layers.Dense(HIDDEN_NODES, activation = 'relu')(x)
     output_layer = tf.keras.layers.Dense(10, activation = 'softmax')(x)
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
@@ -48,14 +51,14 @@ if __name__ == '__main__':
     digit_input = tf.keras.layers.Input(digit_x_train.shape[-1])
     fashion_input = tf.keras.layers.Input(fashion_x_train.shape[-1])
 
-    x = mann.layers.MultiMaskedDense(100, activation = 'relu')([digit_input, fashion_input])
-    for _ in range(4):
-        x = mann.layers.MultiMaskedDense(100, activation = 'relu')(x)
+    x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')([digit_input, fashion_input])
+    for _ in range(HIDDEN_LAYERS - 1):
+        x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')(x)
     output_layer = mann.layers.MultiMaskedDense(10, activation = 'softmax')(x)
 
     model = tf.keras.models.Model([digit_input, fashion_input], output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
-    model = mann.utils.mask_model(model, 70, [digit_x_train, fashion_x_train], [digit_y_train, fashion_y_train])
+    model = mann.utils.mask_model(model, 90, [digit_x_train, fashion_x_train], [digit_y_train, fashion_y_train])
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
 
     model.fit(

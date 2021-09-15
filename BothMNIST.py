@@ -5,7 +5,7 @@ import mann
 
 if __name__ == '__main__':
 
-    HIDDEN_LAYERS = 7
+    HIDDEN_LAYERS = 6
     HIDDEN_NODES = 1000
     
     (digit_x_train, digit_y_train), (digit_x_test, digit_y_test) = tf.keras.datasets.mnist.load_data()

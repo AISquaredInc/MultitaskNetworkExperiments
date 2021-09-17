@@ -224,7 +224,8 @@ if __name__ == '__main__':
         [digit_y_train, fashion_y_train],
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback]
+        callbacks = [callback],
+        validation_split = 0.2
     )
 
     preds = model.predict([digit_x_test, fashion_x_test])

@@ -195,7 +195,7 @@ if __name__ == '__main__':
     )(fashion_selector2)
     digit_flatten = tf.keras.layers.Flatten()(digit_maxpool2)
     fashion_flatten = tf.keras.layers.Flatten()(fashion_maxpool2)
-    x = mann.layers.MultiMaskedDense(256, activation = 'relu')([digit_flattn, fashion_flatten])
+    x = mann.layers.MultiMaskedDense(256, activation = 'relu')([digit_flatten, fashion_flatten])
     x = mann.layers.MultiMaskedDense(256, activation = 'relu')(x)
     output_layer = mann.layers.MultiMaskedDense(10, activation = 'softmax')(x)
     model.compile(

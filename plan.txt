@@ -5,3 +5,4 @@ Experiments
 - Twin MNIST Fashion
 - CIFAR 10 and MNIST and MNIST Fashion
 - Easy and Difficult split out
+- Self Ensemble (?)

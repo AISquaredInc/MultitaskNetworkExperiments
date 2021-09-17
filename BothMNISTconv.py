@@ -198,6 +198,9 @@ if __name__ == '__main__':
     x = mann.layers.MultiMaskedDense(256, activation = 'relu')([digit_flatten, fashion_flatten])
     x = mann.layers.MultiMaskedDense(256, activation = 'relu')(x)
     output_layer = mann.layers.MultiMaskedDense(10, activation = 'softmax')(x)
+    model = tf.keras.models.Model(
+        [digit_input, fashion_input],
+        output_layer
     model.compile(
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],

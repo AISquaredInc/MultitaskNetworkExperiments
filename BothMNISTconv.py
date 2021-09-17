@@ -210,8 +210,8 @@ if __name__ == '__main__':
     model = mann.utils.mask_model(
         model,
         90,
-        [digit_x_train[:20000], fashion_x_train[:20000]],
-        [digit_y_train[:20000], fashion_y_train[:20000]]
+        [digit_x_train[:10000], fashion_x_train[:10000]],
+        [digit_y_train[:10000], fashion_y_train[:10000]]
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',

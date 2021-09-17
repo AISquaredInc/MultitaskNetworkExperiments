@@ -70,7 +70,7 @@ if __name__ == '__main__':
     model.fit(
         digit_x_train,
         digit_y_train,
-        batch_size = 128,
+        batch_size = 512,
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback]
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     model.fit(
         fashion_x_train,
         fashion_y_train,
-        batch_size = 128,
+        batch_size = 512,
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback]
@@ -210,8 +210,8 @@ if __name__ == '__main__':
     model = mann.utils.mask_model(
         model,
         90,
-        [digit_x_train, fashion_x_train],
-        [digit_y_train, fashion_y_train]
+        [digit_x_train[:20000], fashion_x_train[:20000]],
+        [digit_y_train[:20000], fashion_y_train[:20000]]
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',
@@ -223,7 +223,7 @@ if __name__ == '__main__':
         [digit_x_train, fashion_x_train],
         [digit_y_train, fashion_y_train],
         epochs = 100,
-        batch_size = 128,
+        batch_size = 512,
         callbacks = [callback]
     )
 

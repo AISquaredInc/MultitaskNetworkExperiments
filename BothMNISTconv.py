@@ -70,7 +70,7 @@ if __name__ == '__main__':
     model.fit(
         digit_x_train,
         digit_y_train,
-        batch_size = 256,
+        batch_size = 128,
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback]
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     model.fit(
         fashion_x_train,
         fashion_y_train,
-        batch_size = 256,
+        batch_size = 128,
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback]
@@ -223,7 +223,7 @@ if __name__ == '__main__':
         [digit_x_train, fashion_x_train],
         [digit_y_train, fashion_y_train],
         epochs = 100,
-        batch_size = 256,
+        batch_size = 128,
         callbacks = [callback]
     )
 

@@ -201,6 +201,7 @@ if __name__ == '__main__':
     model = tf.keras.models.Model(
         [digit_input, fashion_input],
         output_layer
+    )
     model.compile(
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],

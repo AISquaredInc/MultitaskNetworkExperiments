@@ -211,7 +211,7 @@ if __name__ == '__main__':
     )
     model = mann.utils.mask_model(
         model,
-        90,
+        80,
         [digit_x_train[:10000], fashion_x_train[:10000]],
         [digit_y_train[:10000], fashion_y_train[:10000]]
     )

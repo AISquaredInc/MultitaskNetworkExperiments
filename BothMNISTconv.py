@@ -212,7 +212,7 @@ if __name__ == '__main__':
     model = mann.utils.mask_model(
         model,
         50,
-        method = 'gradients'
+        method = 'gradients',
         x = [digit_x_train[:10000], fashion_x_train[:10000]],
         y = [digit_y_train[:10000], fashion_y_train[:10000]]
     )

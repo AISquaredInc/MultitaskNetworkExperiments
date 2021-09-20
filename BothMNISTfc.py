@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     model = tf.keras.models.Model([digit_input, fashion_input], output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
-    model = mann.utils.mask_model(model, 90, [digit_x_train, fashion_x_train], [digit_y_train, fashion_y_train])
+    model = mann.utils.mask_model(model, 90, x = [digit_x_train, fashion_x_train], y = [digit_y_train, fashion_y_train])
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
 
     model.fit(

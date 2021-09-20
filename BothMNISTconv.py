@@ -18,7 +18,7 @@ if __name__ == '__main__':
         patience = 3,
         restore_best_weights = True
     )
-
+    
     input_layer = tf.keras.layers.Input(digit_x_train.shape[1:])
     x = tf.keras.layers.Conv2D(
         32,

@@ -219,7 +219,8 @@ if __name__ == '__main__':
     model.compile(
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],
-        optimizer = 'adam'
+        optimizer = 'adam',
+        loss_weights = [0, 1]
     )
 
     model.fit(

@@ -211,7 +211,7 @@ if __name__ == '__main__':
     )
     model = mann.utils.mask_model(
         model,
-        50,
+        90,
         method = 'gradients',
         x = [digit_x_train[:10000], fashion_x_train[:10000]],
         y = [digit_y_train[:10000], fashion_y_train[:10000]]
@@ -219,25 +219,7 @@ if __name__ == '__main__':
     model.compile(
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],
-        optimizer = 'adam',
-        loss_weights = [0,1]
-    )
-
-    model.fit(
-        [digit_x_train, fashion_x_train],
-        [digit_y_train, fashion_y_train],
-        epochs = 100,
-        batch_size = 512,
-        callbacks = [callback],
-        validation_split = 0.2,
-        verbose = 1
-    )
-
-    model.compile(
-        loss = 'sparse_categorical_crossentropy',
-        metrics = ['accuracy'],
-        optimizer = 'adam',
-        loss_weights = [1, 1]
+        optimizer = 'adam'
     )
 
     model.fit(
@@ -252,7 +234,7 @@ if __name__ == '__main__':
 
     preds = model.predict([digit_x_test, fashion_x_test])
     digit_preds = preds[0].argmax(axis = 1)
-    fashion_preds = preds[0].argmax(axis = 1)
+    fashion_preds = preds[1].argmax(axis = 1)
     
     print('Multitask Model Digit Performance:')
     print(confusion_matrix(digit_y_test, digit_preds))

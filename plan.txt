@@ -2,7 +2,6 @@ Experiments
 - MNIST and MNIST Fashion (Dense) (done)
 - MNIST and MNIST Fashion (Convolutional) (done)
 - MNIST and MNIST Fashion and Boston Housing (Dense) (done)
-- Twin MNIST Fashion
+- Multi MNIST Fashion/Ensemble
 - CIFAR 10 and MNIST and MNIST Fashion
 - Easy and Difficult split out
-- Self Ensemble (?)

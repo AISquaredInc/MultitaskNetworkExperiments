@@ -143,6 +143,6 @@ if __name__ == '__main__':
             boston_x_test
         ]
     )[2]
-    print(accuracy_score(digit_y_test, digit_preds))
-    print(accuracy_score(fashion_y_test, fashion_preds))
+    print(classification_report(digit_y_test, digit_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
     

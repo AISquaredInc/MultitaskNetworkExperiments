@@ -134,7 +134,7 @@ if __name__ == '__main__':
         80,
         method = 'gradients',
         exclusive = True,
-        x = x_train[:1000],
+        x = [x_train[:1000]]*5,
         y = [y_train[:1000]]*5
     )
     model.compile(
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         optimizer = 'adam'
     )
     model.fit(
-        x_train,
+        [x_train] * 5,
         [y_train] * 5,
         epochs = 100,
         batch_size = 512,

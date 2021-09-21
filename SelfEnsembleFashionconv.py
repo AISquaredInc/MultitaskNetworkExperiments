@@ -121,7 +121,7 @@ if __name__ == '__main__':
     x = mann.layers.MultiMaskedDense(256, activation = 'relu')(x)
     output_layer = mann.layers.MultiMaskedDense(10, activation = 'softmax')(x)
     model = tf.keras.models.Model(
-        input_layer,
+        [input1, input2, input3, input4, input5],
         output_layer
     )
     model.compile(

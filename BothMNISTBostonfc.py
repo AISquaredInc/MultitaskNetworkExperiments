@@ -128,3 +128,19 @@ if __name__ == '__main__':
         batch_size = 32,
         verbose = 1
     )
+
+    mnist_preds = model.predict(
+        [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1]))]
+    )
+    digit_preds = mnist_preds[0].argmax(axis = 1)
+    fashion_preds = mnist_preds[1].argmax(axis = 1)
+    boston_preds = model.predict(
+        [
+            np.zeros((boston_x_test.shape[0], digit_x_test.shape[1])),
+            np.zeros((boston_x_test.shape[0], fashion_x_test.shape[1])),
+            boston_x_test
+        ]
+    )[2]
+    print(accuracy_score(digit_y_test, digit_preds))
+    print(accuracy_score(fashion_y_test, fashion_preds))
+    

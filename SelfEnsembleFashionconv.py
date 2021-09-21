@@ -15,13 +15,17 @@ if __name__ == '__main__':
         restore_best_weights = True
     )
 
-    input_layer = tf.keras.layers.Input(x_train.shape[1:])
+    input1 = tf.keras.layers.Input(x_train.shape[1:])
+    input2 = tf.keras.layers.Input(x_train.shape[1:])
+    input3 = tf.keras.layers.Input(x_train.shape[1:])
+    input4 = tf.keras.layers.Input(x_train.shape[1:])
+    input5 = tf.keras.layers.Input(x_train.shape[1:])
     x = mann.layers.MultiMaskedConv2D(
         32,
         3,
         padding = 'same',
         activation = 'relu'
-    )([input_layer]*5)
+    )([input1, input2, input3, input4, input5])
     x = mann.layers.MultiMaskedConv2D(
         32,
         3,

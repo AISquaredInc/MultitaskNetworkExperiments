@@ -92,7 +92,7 @@ if __name__ == '__main__':
             'mse'
         ],
         optimizer = 'adam',
-        loss_weights = [0.5, 0.5, 0]
+        loss_weights = [1, 1, 0]
     )
     model.fit(
         [digit_x_train, fashion_x_train, np.zeros((digit_x_train.shape[0], boston_x_train.shape[1]))],
@@ -100,7 +100,8 @@ if __name__ == '__main__':
         batch_size = 512,
         epochs = 100,
         callbacks = [callback],
-        verbose = 1
+        verbose = 1,
+        validation_split = 0.2
     )
         
     model.compile(
@@ -126,7 +127,8 @@ if __name__ == '__main__':
         epochs = 100,
         callbacks = [callback],
         batch_size = 32,
-        verbose = 1
+        verbose = 1,
+        validation_split = 0.2
     )
 
     mnist_preds = model.predict(

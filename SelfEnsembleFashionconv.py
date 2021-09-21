@@ -130,8 +130,8 @@ if __name__ == '__main__':
         80,
         method = 'gradients',
         exclusive = True,
-        x = x_train,
-        y = [y_train]*5
+        x = x_train[:10000],
+        y = [y_train[:10000]]*5
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',

@@ -100,7 +100,8 @@ if __name__ == '__main__':
         batch_size = 512,
         epochs = 100,
         callbacks = [callback],
-        verbose = 1
+        verbose = 1,
+        validation_split = 0.2
     )
         
     model.compile(
@@ -126,5 +127,6 @@ if __name__ == '__main__':
         epochs = 100,
         callbacks = [callback],
         batch_size = 32,
-        verbose = 1
+        verbose = 1,
+        validation_split = 0.2
     )

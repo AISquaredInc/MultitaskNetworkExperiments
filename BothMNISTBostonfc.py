@@ -100,7 +100,7 @@ if __name__ == '__main__':
         batch_size = 512,
         epochs = 100,
         callbacks = [callback],
-        verbose = 1,
+        verbose = 0,
         validation_split = 0.2
     )
         
@@ -127,7 +127,7 @@ if __name__ == '__main__':
         epochs = 100,
         callbacks = [callback],
         batch_size = 32,
-        verbose = 1,
+        verbose = 0,
         validation_split = 0.2
     )
 
@@ -143,6 +143,13 @@ if __name__ == '__main__':
             boston_x_test
         ]
     )[2]
+
+    print('Multitask Model Digit Performance:')
+    print(confusion_matrix(digit_y_test, digit_preds))
     print(classification_report(digit_y_test, digit_preds))
+    print('\n')
+    print('Multitask Model Fashion Performance:')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
-    print(tf.keras.losses.mse(boston_y_test, boston_preds).numpy().mean())
+    print('\n')
+    print(f'Multitask Model Boston Loss {tf.keras.losses.mse(boston_y_test, boston_preds).numpy().mean()}')

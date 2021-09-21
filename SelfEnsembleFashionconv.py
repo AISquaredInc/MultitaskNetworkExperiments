@@ -148,7 +148,8 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 512,
         callbacks = [callback],
-        validation_split = 0.2
+        validation_split = 0.2,
+        verbose = 0
     )
 
     preds = model.predict([x_test] * 5)

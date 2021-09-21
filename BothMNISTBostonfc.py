@@ -145,4 +145,4 @@ if __name__ == '__main__':
     )[2]
     print(classification_report(digit_y_test, digit_preds))
     print(classification_report(fashion_y_test, fashion_preds))
-    print(tf.keras.losses.mse(boston_y_test, boston_preds))
+    print(tf.keras.losses.mse(boston_y_test, boston_preds).mean())

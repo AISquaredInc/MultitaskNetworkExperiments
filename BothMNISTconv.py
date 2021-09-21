@@ -1,4 +1,4 @@
-from sklearn.metrics import classification_report, confusion_matrix
+rom sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import mann
@@ -207,7 +207,8 @@ if __name__ == '__main__':
     model.compile(
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],
-        optimizer = 'adam'
+        optimizer = 'adam',
+        loss_weights = [0.34, 0.66]
     )
     model = mann.utils.mask_model(
         model,

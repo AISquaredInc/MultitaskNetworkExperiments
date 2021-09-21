@@ -1,4 +1,4 @@
-rom sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import mann

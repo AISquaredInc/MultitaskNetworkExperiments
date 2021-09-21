@@ -74,7 +74,7 @@ if __name__ == '__main__':
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback],
-        verbose = 1
+        verbose = 0
     )
     digit_preds = model.predict(digit_x_test).argmax(axis = 1)
     
@@ -137,7 +137,7 @@ if __name__ == '__main__':
         epochs = 100,
         validation_split = 0.2,
         callbacks = [callback],
-        verbose = 1
+        verbose = 0
     )
     fashion_preds = model.predict(fashion_x_test).argmax(axis = 1)
 
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     )
     model = mann.utils.mask_model(
         model,
-        90,
+        80,
         method = 'gradients',
         x = [digit_x_train[:10000], fashion_x_train[:10000]],
         y = [digit_y_train[:10000], fashion_y_train[:10000]]
@@ -229,7 +229,7 @@ if __name__ == '__main__':
         batch_size = 512,
         callbacks = [callback],
         validation_split = 0.2,
-        verbose = 1
+        verbose = 0
     )
 
     preds = model.predict([digit_x_test, fashion_x_test])

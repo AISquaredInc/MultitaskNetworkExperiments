@@ -208,7 +208,7 @@ if __name__ == '__main__':
         loss = 'sparse_categorical_crossentropy',
         metrics = ['accuracy'],
         optimizer = 'adam',
-        loss_weights = [0.34, 0.66]
+        loss_weights = [0.25, 0.75]
     )
     model = mann.utils.mask_model(
         model,

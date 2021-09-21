@@ -103,3 +103,28 @@ if __name__ == '__main__':
         verbose = 1
     )
         
+    model.compile(
+        loss = [
+            'sparse_categorical_crossentropy',
+            'sparse_categorical_crossentropy',
+            'mse'
+        ],
+        optimizer = 'adam',
+        loss_weights = [0, 0, 1]
+    )
+    model.fit(
+        [
+            np.zeros((boston_x_train.shape[0], digit_x_train.shape[1])),
+            np.zeros((boston_x_train.shape[0], fashion_x_train.shape[1])),
+            boston_x_train
+        ],
+        [
+            np.zeros(boston_x_train.shape[0]),
+            np.zeros(boston_x_train.shape[0]),
+            boston_y_train
+        ],
+        epochs = 100,
+        callbacks = [callback],
+        batch_size = 32,
+        verbose = 1
+    )

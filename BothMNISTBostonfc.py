@@ -92,7 +92,7 @@ if __name__ == '__main__':
             'mse'
         ],
         optimizer = 'adam',
-        loss_weights = [0.5, 0.5, 0]
+        loss_weights = [1, 1, 0]
     )
     model.fit(
         [digit_x_train, fashion_x_train, np.zeros((digit_x_train.shape[0], boston_x_train.shape[1]))],

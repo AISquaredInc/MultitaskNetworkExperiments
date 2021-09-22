@@ -118,8 +118,8 @@ if __name__ == '__main__':
         loss_weights = [0, 1, 1]
     )
     model.fit(
-        [np.zeros(digit_x_train.shape), digit_x_train, fashion_x_train],
-        [np.zeros(digit_y_train.shape), digit_y_train, fashion_y_train],
+        [np.zeros((60000,) + cifar_x_train.shape[1:]), digit_x_train, fashion_x_train],
+        [np.zeros(60000), digit_y_train, fashion_y_train],
         epochs = 100,
         batch_size = 512,
         callbacks = [callback],

@@ -105,7 +105,7 @@ if __name__ == '__main__':
     
     model.fit(
         [cifar_x_train, digit_x_train[:cifar_x_train.shape[0]], fashion_x_train[:cifar_x_train.shape[0]]],
-         [cifar_y_train, digit_y_train[:cifar_x_train.shape[0]], fashion_x_train[:cifar_x_train.shape[0]]],
+         [cifar_y_train, digit_y_train[:cifar_x_train.shape[0]], fashion_y_train[:cifar_x_train.shape[0]]],
         epochs = 100,
         batch_size = 512,
         callbacks = [callback],

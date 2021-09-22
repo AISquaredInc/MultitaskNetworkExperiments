@@ -15,6 +15,11 @@ if __name__ == '__main__':
     digit_x_test = digit_x_test.reshape((digit_x_test.shape[0], 28, 28, 1))
     fashion_x_train = fashion_x_train.reshape((fashion_x_train.shape[0], 28, 28, 1))
     fashion_x_test = fashion_x_test.reshape((fashion_x_test.shape[0], 28, 28, 1))
-    print(cifar_x_train.shape)
-    print(cifar_x_test.shape)
-    print(digit_x_train.shape)
+
+    cifar_input = tf.keras.layers.Input(cifar_x_train.shape[1:])
+    digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
+    fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
+
+    cifar_conv = mann.layers.MaskedConv2D(32, activation = 'relu')(cifar_input)
+    mnist_conv = mann.layers.MaskedMultiConv2D(32, activation = 'relu')([digit_input, fashion_input])
+    x = mann.layers.MaskedMultiConv2D(32, activation = 'relu')([cifar_conv, mnist_conv])

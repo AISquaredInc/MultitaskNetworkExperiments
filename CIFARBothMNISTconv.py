@@ -125,3 +125,17 @@ if __name__ == '__main__':
         callbacks = [callback],
         validation_split = 0.2
     )
+
+    cifar_preds = model.predict(
+        [cifar_x_test, digit_x_test[:cifar_x_test.shape[0]], fashion_x_test[:cifar_x_test.shape[0]]],
+        )[0].argmax(axis = 1)
+    digit_preds, fashion_preds = model.predict(
+        [np.zeros((10000,), + cifar_x_test.shape[1:]), digit_x_test, fashion_x_test]
+    )[-1:]
+    digit_preds = digit_preds.argmax(axis = 1)
+    fashion_preds = fashion_preds.argmax(axis = 1)
+
+    print(classification_report(cifar_y_test, cifar_preds))
+    print(classification_report(digit_y_test, digit_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
+        

@@ -109,7 +109,8 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 512,
         callbacks = [callback],
-        validation_split = 0.2
+        validation_split = 0.2,
+        verbose = 0
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',
@@ -123,14 +124,15 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 512,
         callbacks = [callback],
-        validation_split = 0.2
+        validation_split = 0.2,
+        verbose = 0
     )
 
     cifar_preds = model.predict(
         [cifar_x_test, digit_x_test[:cifar_x_test.shape[0]], fashion_x_test[:cifar_x_test.shape[0]]],
         )[0].argmax(axis = 1)
     digit_preds, fashion_preds = model.predict(
-        [np.zeros((10000,), + cifar_x_test.shape[1:]), digit_x_test, fashion_x_test]
+        [np.zeros((10000,) + cifar_x_test.shape[1:]), digit_x_test, fashion_x_test]
     )[-1:]
     digit_preds = digit_preds.argmax(axis = 1)
     fashion_preds = fashion_preds.argmax(axis = 1)

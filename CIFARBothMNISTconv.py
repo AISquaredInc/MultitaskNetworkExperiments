@@ -23,10 +23,51 @@ if __name__ == '__main__':
     fashion_x_train = fashion_x_train.reshape((fashion_x_train.shape[0], 28, 28, 1))
     fashion_x_test = fashion_x_test.reshape((fashion_x_test.shape[0], 28, 28, 1))
 
+    input_layer = tf.keras.layers.Input(cifar_x_train.shape[1:])
+    x = tf.keras.layers.Conv2D(32, padding = 'same', activation = 'relu')(input_layer)
+    x = tf.keras.layers.Conv2D(32, padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(x)
+    x = tf.keras.layers.Conv2D(64, padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.Conv2D(64, padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(x)
+    x = tf.keras.layers.Flatten()(x)
+    x = tf.keras.layers.Dense(256, activation = 'relu')(x)
+    x = tf.keras.layers.Dense(256, activation = 'relu')(x)
+    output_layer = tf.keras.layers.Dense(10, activation = 'relu')(x)
+
+    model = tf.keras.models.Model(input_layer, output_layer)
+    model.compile(
+        loss = 'sparse_categorical_crossentropy',
+        metrics = ['accuracy'],
+        optimizer = 'adam'
+    )
+    model.fit(
+        cifar_x_train,
+        cifar_y_train,
+        epochs = 100,
+        batch_size = 512,
+        callbacks = [callback],
+        validation_split = 0.2,
+        verbose = 0
+    )
+    cifar_preds = model.predict(cifar_x_test).argmax(axis = 1)
+    print('Dedicated Model CIFAR Performance:')
+    print(confusion_matrix(cifar_y_test, cifar_preds))
+    print(classification_report(cifar_y_test, cifar_preds))
+    print('\n')
+    
     cifar_input = tf.keras.layers.Input(cifar_x_train.shape[1:])
     digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
     fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
-
+    
     cifar_conv = mann.layers.MaskedConv2D(32, padding = 'same', activation = 'relu')(cifar_input)
     mnist_conv = mann.layers.MultiMaskedConv2D(32, padding = 'same', activation = 'relu')([digit_input, fashion_input])
     x = mann.layers.MultiMaskedConv2D(32, padding = 'same', activation = 'relu')([cifar_conv] + mnist_conv)
@@ -137,7 +178,15 @@ if __name__ == '__main__':
     digit_preds = digit_preds.argmax(axis = 1)
     fashion_preds = fashion_preds.argmax(axis = 1)
 
+    print('Multitask Model CIFAR Performance:')
+    print(confusion_matrix(cifar_y_test, cifar_preds))
     print(classification_report(cifar_y_test, cifar_preds))
+    print('\n')
+    
+    print('Multitask Model Digit Performance:')
+    print(confusion_matrix(digit_y_test, digit_preds))
     print(classification_report(digit_y_test, digit_preds))
+
+    print('Multitask Model Fashion Performance:')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
-        

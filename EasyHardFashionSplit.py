@@ -31,7 +31,7 @@ if __name__ == '__main__':
     hard_y_test = y_test[np.isin(y_test, hard_values)]
 
     easy_mapper = dict(zip(easy_values, range(len(easy_values))))
-    hard_mapper = dict(zip(hard_value, range(len(hard_values))))
+    hard_mapper = dict(zip(hard_values, range(len(hard_values))))
 
     easy_y_train = np.array(
         [easy_mapper[val] for val in easy_y_train.flatten()]

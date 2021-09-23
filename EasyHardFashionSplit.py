@@ -46,6 +46,12 @@ if __name__ == '__main__':
         [hard_mapper[val] for val in hard_y_test.flatten()]
     )
 
+    callback = tf.keras.callbacks.EarlyStopping(
+        min_delta = 0.01,
+        patience = 3,
+        restore_best_weights = True
+    )
+    
     input1 = tf.keras.layers.Input(easy_x_train.shape[1:])
     input2 = tf.keras.layers.Input(hard_x_train.shape[1:])
     x = mann.layers.MultiMaskedConv2D(

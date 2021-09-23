@@ -24,15 +24,15 @@ if __name__ == '__main__':
     fashion_x_test = fashion_x_test.reshape((fashion_x_test.shape[0], 28, 28, 1))
 
     input_layer = tf.keras.layers.Input(cifar_x_train.shape[1:])
-    x = tf.keras.layers.Conv2D(32, padding = 'same', activation = 'relu')(input_layer)
-    x = tf.keras.layers.Conv2D(32, padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.Conv2D(32, kernel_size = (3, 3), padding = 'same', activation = 'relu')(input_layer)
+    x = tf.keras.layers.Conv2D(32, kernel_size = (3, 3), padding = 'same', activation = 'relu')(x)
     x = tf.keras.layers.MaxPool2D(
         pool_size = 2,
         strides = 1,
         padding = 'valid'
     )(x)
-    x = tf.keras.layers.Conv2D(64, padding = 'same', activation = 'relu')(x)
-    x = tf.keras.layers.Conv2D(64, padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.Conv2D(64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(x)
+    x = tf.keras.layers.Conv2D(64, kernel_size = (3, 3), padding = 'same', activation = 'relu')(x)
     x = tf.keras.layers.MaxPool2D(
         pool_size = 2,
         strides = 1,

@@ -133,7 +133,7 @@ if __name__ == '__main__':
         )[0].argmax(axis = 1)
     digit_preds, fashion_preds = model.predict(
         [np.zeros((10000,) + cifar_x_test.shape[1:]), digit_x_test, fashion_x_test]
-    )[-1:]
+    )[-2:]
     digit_preds = digit_preds.argmax(axis = 1)
     fashion_preds = fashion_preds.argmax(axis = 1)
 

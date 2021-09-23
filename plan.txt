@@ -4,4 +4,4 @@ Experiments
 - MNIST and MNIST Fashion and Boston Housing (Dense) (done)
 - Multi MNIST Fashion/Ensemble (done)
 - CIFAR 10 and MNIST and MNIST Fashion
-- Easy and Difficult split out
+- Easy and Difficult split out (done)

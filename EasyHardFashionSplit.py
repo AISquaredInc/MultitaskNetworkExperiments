@@ -23,7 +23,7 @@ if __name__ == '__main__':
     easy_x_train = x_train[np.isin(y_train, easy_values)]
     easy_y_train = y_train[np.isin(y_train, easy_values)]
     hard_x_train = x_train[np.isin(y_train, hard_values)]
-    hard_y_train = y_train[np.ixin(y_train, hard_values)]
+    hard_y_train = y_train[np.isin(y_train, hard_values)]
 
     easy_x_test = x_test[np.isin(y_test, easy_values)]
     easy_y_test = y_test[np.isin(y_test, easy_values)]

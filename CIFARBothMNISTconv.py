@@ -41,7 +41,7 @@ if __name__ == '__main__':
     x = tf.keras.layers.Flatten()(x)
     x = tf.keras.layers.Dense(256, activation = 'relu')(x)
     x = tf.keras.layers.Dense(256, activation = 'relu')(x)
-    output_layer = tf.keras.layers.Dense(10, activation = 'relu')(x)
+    output_layer = tf.keras.layers.Dense(10, activation = 'softmax')(x)
 
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(

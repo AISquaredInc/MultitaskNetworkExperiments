@@ -152,6 +152,8 @@ if __name__ == '__main__':
         verbose = 0
     )
 
+    model = mann.utils.utils.convert_model(model)
+
     preds = model.predict([x_test] * 5)
     preds1 = preds[0].argmax(axis = 1)
     preds2 = preds[1].argmax(axis = 1)

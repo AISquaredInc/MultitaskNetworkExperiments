@@ -215,7 +215,7 @@ if __name__ == '__main__':
         80,
         method = 'gradients',
         x = [digit_x_train[:10000], fashion_x_train[:10000]],
-        y = [digit_y_train[:10000], fashion_y_train[:10000]]
+        y = [digit_y_train[:10000].reshape(-1, 1), fashion_y_train[:10000].reshape(-1, 1)]
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',

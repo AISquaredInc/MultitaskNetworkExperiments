@@ -80,9 +80,9 @@ if __name__ == '__main__':
             boston_x_train
         ],
         y = [
-            digit_y_train[:boston_x_train.shape[0]],
-            fashion_y_train[:boston_x_train.shape[0]],
-            boston_y_train
+            digit_y_train[:boston_x_train.shape[0]].reshape(-1, 1),
+            fashion_y_train[:boston_x_train.shape[0]].reshape(-1, 1),
+            boston_y_train.reshape(-1, 1)
         ]
     )
     model.compile(

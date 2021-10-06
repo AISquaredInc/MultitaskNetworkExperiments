@@ -135,7 +135,7 @@ if __name__ == '__main__':
         method = 'gradients',
         exclusive = True,
         x = [x_train[:1000]]*5,
-        y = [y_train[:1000]]*5
+        y = [y_train[:1000].reshape(-1, 1)]*5
     )
     model.compile(
         loss = 'sparse_categorical_crossentropy',

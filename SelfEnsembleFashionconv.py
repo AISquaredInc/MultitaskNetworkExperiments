@@ -152,7 +152,7 @@ if __name__ == '__main__':
         verbose = 0
     )
 
-    model = mann.utils.utils.convert_model(model)
+    model = mann.utils.utils.remove_layer_masks(model)
 
     preds = model.predict([x_test] * 5)
     preds1 = preds[0].argmax(axis = 1)

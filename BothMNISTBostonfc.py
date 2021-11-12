@@ -131,7 +131,7 @@ if __name__ == '__main__':
         validation_split = 0.2
     )
 
-    model = mann.utils.utils.convert_model(model)
+    model = mann.utils.utils.remove_layer_masks(model)
 
     mnist_preds = model.predict(
         [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1]))]

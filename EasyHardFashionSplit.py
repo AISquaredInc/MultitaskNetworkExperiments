@@ -144,7 +144,7 @@ if __name__ == '__main__':
         verbose = 0
     )
 
-    model = mann.utils.utils.convert_model(model)
+    model = mann.utils.utils.remove_layer_masks(model)
 
     easy_preds, hard_preds = model.predict([easy_x_test, hard_x_test])
     easy_preds = easy_preds.argmax(axis = 1)

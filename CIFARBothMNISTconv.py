@@ -169,7 +169,7 @@ if __name__ == '__main__':
         verbose = 0
     )
 
-    model = mann.utils.utils.convert_model(model)
+    model = mann.utils.utils.remove_layer_masks(model)
 
     cifar_preds = model.predict(
         [cifar_x_test, digit_x_test[:cifar_x_test.shape[0]], fashion_x_test[:cifar_x_test.shape[0]]],

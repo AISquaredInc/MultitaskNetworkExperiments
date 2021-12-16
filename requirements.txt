@@ -1,0 +1,6 @@
+scikit-learn
+opencv-python
+tensorflow
+numpy
+tqdm
+mann

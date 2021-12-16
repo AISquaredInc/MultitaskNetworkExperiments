@@ -4,6 +4,7 @@ from tqdm import tqdm
 import numpy as np
 import mann
 import cv2
+import os
 
 if __name__ == '__main__':
     (cifar_x_train, cifar_y_train), (cifar_x_test, cifar_y_test) = tf.keras.datasets.cifar10.load_data()
@@ -16,6 +17,20 @@ if __name__ == '__main__':
         restore_best_weights = True
     )
     
+    log_dir = os.path.join('.', 'logs', 'CIFARBothMNISTConv')
+    cifar_log_dir = os.path.join(log_dir, 'CIFARControl')
+    mann_log_dir = os.path.join(log_dir, 'mann')
+
+    cifar_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = cifar_log_dir,
+        histogram_freq = 1
+    )
+
+    mann_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = mann_log_dir,
+        histogram_freq = 1
+    )
+
     cifar_x_train = np.array([cv2.resize(cifar_x_train[i], (28, 28)) for i in tqdm(range(cifar_x_train.shape[0]))])
     cifar_x_test = np.array([cv2.resize(cifar_x_test[i], (28, 28)) for i in tqdm(range(cifar_x_test.shape[0]))])
     digit_x_train = digit_x_train.reshape((digit_x_train.shape[0], 28, 28, 1))
@@ -54,7 +69,7 @@ if __name__ == '__main__':
         cifar_y_train,
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback],
+        callbacks = [callback, cifar_tboard],
         validation_split = 0.2,
         verbose = 0
     )
@@ -149,7 +164,7 @@ if __name__ == '__main__':
          [cifar_y_train, digit_y_train[:cifar_x_train.shape[0]], fashion_y_train[:cifar_x_train.shape[0]]],
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         validation_split = 0.2,
         verbose = 0
     )
@@ -164,7 +179,7 @@ if __name__ == '__main__':
         [np.zeros(60000), digit_y_train, fashion_y_train],
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         validation_split = 0.2,
         verbose = 0
     )

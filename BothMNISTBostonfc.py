@@ -3,6 +3,8 @@ from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 import numpy as np
 import mann
+import os
+
 
 if __name__ == '__main__':
 
@@ -32,6 +34,20 @@ if __name__ == '__main__':
         restore_best_weights = True
     )
 
+    log_dir = os.path.join('.', 'logs', 'BothMNISTBostonfc')
+    boston_log_dir = os.path.join(log_dir, 'boston')
+    mann_log_dir = os.path.join(log_dir, 'mann')
+
+    boston_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = boston_log_dir,
+        histogram_freq = 1
+    )
+
+    mann_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = boston_log_dir,
+        histogram_freq = 1
+    )
+
     # Boston housing control
     input_layer = tf.keras.layers.Input(boston_x_train.shape[1:])
     x = tf.keras.layers.Dense(digit_x_train.shape[-1], activation = 'relu')(input_layer)
@@ -40,7 +56,7 @@ if __name__ == '__main__':
     output_layer = tf.keras.layers.Dense(1, activation = 'relu')(x)
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(loss = 'mse', optimizer = 'adam')
-    model.fit(boston_x_train, boston_y_train, epochs = 100, batch_size = 32, validation_split = 0.2, callbacks = [callback], verbose = 0)
+    model.fit(boston_x_train, boston_y_train, epochs = 100, batch_size = 32, validation_split = 0.2, callbacks = [callback, boston_tboard], verbose = 0)
     boston_performance = model.evaluate(boston_x_test, boston_y_test, verbose = 0)
     print(f'Boston Dedicated Model Loss: {boston_performance}')
 
@@ -99,7 +115,7 @@ if __name__ == '__main__':
         [digit_y_train, fashion_y_train, np.zeros(digit_x_train.shape[0])],
         batch_size = 512,
         epochs = 100,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         verbose = 0,
         validation_split = 0.2
     )

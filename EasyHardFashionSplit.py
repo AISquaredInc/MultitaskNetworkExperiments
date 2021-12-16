@@ -2,6 +2,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 import numpy as np
 import mann
+import os
 
 if __name__ == '__main__':
 
@@ -52,6 +53,14 @@ if __name__ == '__main__':
         restore_best_weights = True
     )
     
+    log_dir = os.path.join('.', 'logs', 'EasyHardFashionSplit')
+    mann_log_dir = os.path.join(log_dir, 'mann')
+
+    mann_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = mann_log_dir,
+        histogram_freq = 1
+    )
+
     input1 = tf.keras.layers.Input(easy_x_train.shape[1:])
     input2 = tf.keras.layers.Input(hard_x_train.shape[1:])
     x = mann.layers.MultiMaskedConv2D(
@@ -139,7 +148,7 @@ if __name__ == '__main__':
         [easy_y_train, hard_y_train],
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         validation_split = 0.2,
         verbose = 0
     )

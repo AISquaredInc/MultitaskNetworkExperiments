@@ -2,6 +2,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import mann
+import os
 
 if __name__ == '__main__':
 
@@ -13,6 +14,14 @@ if __name__ == '__main__':
         min_delta = 0.01,
         patience = 3,
         restore_best_weights = True
+    )
+
+    log_dir = os.path.join('.', 'logs', 'SelfEnsembleFashionConv')
+    mann_log_dir = os.path.join(log_dir, 'mann')
+
+    mann_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = mann_log_dir,
+        histogram_freq = 1
     )
 
     input1 = tf.keras.layers.Input(x_train.shape[1:])
@@ -147,7 +156,7 @@ if __name__ == '__main__':
         [y_train] * 5,
         epochs = 100,
         batch_size = 512,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         validation_split = 0.2,
         verbose = 0
     )

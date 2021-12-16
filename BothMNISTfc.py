@@ -2,6 +2,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import mann
+import os
 
 if __name__ == '__main__':
 
@@ -16,10 +17,30 @@ if __name__ == '__main__':
     fashion_x_train = fashion_x_train.reshape((fashion_x_train.shape[0], -1))/255
     fashion_x_test = fashion_x_test.reshape((fashion_x_test.shape[0], -1))/255
 
+    log_dir = os.path.join('.', 'logs', 'BothMNISTfc')
+    digit_log_dir = os.path.join(log_dir, 'digitControl')
+    fashion_log_dir = os.path.join(log_dir, 'fashionControl')
+    mann_log_dir = os.path.join(log_dir, 'mann')
+
     callback = tf.keras.callbacks.EarlyStopping(
         min_delta = 0.01,
         patience = 3,
         restore_best_weights = True
+    )
+
+    digit_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = digit_log_dir,
+        histogram_freq = 1
+    )
+
+    fashion_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = fashion_log_dir,
+        histogram_freq = 1
+    )
+
+    mann_tboard = tf.keras.callbacks.TensorBoard(
+        log_dir = mann_log_dir,
+        histogram_freq = 1
     )
 
     input_layer = tf.keras.layers.Input(digit_x_train.shape[-1])
@@ -29,7 +50,7 @@ if __name__ == '__main__':
     output_layer = tf.keras.layers.Dense(10, activation = 'softmax')(x)
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
-    model.fit(digit_x_train, digit_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback], verbose = 0)
+    model.fit(digit_x_train, digit_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback, digit_tboard], verbose = 0)
     digit_preds = model.predict(digit_x_test).argmax(axis = 1)
     print('Dedicated Model Digit Performance:')
     print(confusion_matrix(digit_y_test, digit_preds))
@@ -42,7 +63,7 @@ if __name__ == '__main__':
     output_layer = tf.keras.layers.Dense(10, activation = 'softmax')(x)
     model = tf.keras.models.Model(input_layer, output_layer)
     model.compile(loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
-    model.fit(fashion_x_train, fashion_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback], verbose = 0)
+    model.fit(fashion_x_train, fashion_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback, fashion_tboard], verbose = 0)
     fashion_preds = model.predict(fashion_x_test).argmax(axis = 1)
     print('Dedicated Model Fashion Performance:')
     print(confusion_matrix(fashion_y_test, fashion_preds))
@@ -67,7 +88,7 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 512,
         validation_split = 0.2,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         verbose = 0
     )
 

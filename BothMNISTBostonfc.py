@@ -141,7 +141,7 @@ if __name__ == '__main__':
             boston_y_train
         ],
         epochs = 100,
-        callbacks = [callback],
+        callbacks = [callback, mann_tboard],
         batch_size = 32,
         verbose = 0,
         validation_split = 0.2

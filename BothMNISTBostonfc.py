@@ -44,7 +44,7 @@ if __name__ == '__main__':
     )
 
     mann_tboard = tf.keras.callbacks.TensorBoard(
-        log_dir = boston_log_dir,
+        log_dir = mann_log_dir,
         histogram_freq = 1
     )
 

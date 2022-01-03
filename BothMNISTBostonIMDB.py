@@ -125,7 +125,6 @@ if __name__ == '__main__':
         loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],
         optimizer = 'adam'
     )
-    model.summary()
     model = mann.utils.mask_model(
         model,
         90,
@@ -154,6 +153,38 @@ if __name__ == '__main__':
         [digit_y_train, fashion_y_train, np.zeros(digit_x_train.shape[0]).reshape(-1, 1), np.zeros(digit_x_train.shape[0]).reshape(-1 ,1)],
         epochs = 100,
         batch_size = 512,
+        validation_split = 0.2,
+        callbacks = [callback, mann_tboard]
+    )
+
+    model.compile(
+        loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],
+        optimizer = 'adam',
+        loss_weights = [0, 0, 1, 0]
+    )
+    
+    # Train the model on the boston task
+    model.fit(
+        [np.zeros((boston_x_train.shape[0], digit_x_train.shape[1])), np.zeros((boston_x_train.shape[0], fashion_x_train.shape[1])), boston_x_train, np.zeros((boston_x_train.shape[0], imdb_x_train.shape[1]))],
+        [np.zeros(boston_x_train.shape[0]).reshape(-1, 1), np.zeros(boston_x_train.shape[0]).reshape(-1, 1), boston_y_train, np.zeros(boston_x_train.shape[0]).reshape(-1, 1)],
+        epochs = 100,
+        batch_size = 32,
+        validation_split = 0.2,
+        callbacks = [callback, mann_tboard]
+    )
+
+    model.compile(
+        loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],
+        optimizer = 'adam',
+        loss_weights = [0, 0, 0, 1]
+    )
+
+    # Train the model on the IMDB task
+    model.fit(
+        [np.zeros((imdb_x_train.shape[0], digit_x_train.shape[1])), np.zeros((imdb_x_train.shape[0], fashion_x_train.shape[1])), np.zeros((imdb_x_train.shape[0], boston_x_train.shape[1])), imdb_x_train],
+        [np.zeros(imdb_x_train.shape[0]).reshape(-1, 1), np.zeros(imdb_x_train.shape[0]).reshape(-1, 1), np.zeros(imdb_x_train.shape[0]).reshape(-1, 1), imdb_y_train],
+        epochs = 100,
+        batch_size = 32,
         validation_split = 0.2,
         callbacks = [callback, mann_tboard]
     )

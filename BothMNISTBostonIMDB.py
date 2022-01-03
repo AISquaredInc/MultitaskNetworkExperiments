@@ -144,5 +144,16 @@ if __name__ == '__main__':
     )
     model.compile(
         loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],
-        optimizer = 'adam'
+        optimizer = 'adam',
+        loss_weights = [1, 1, 0, 0]
+    )
+
+    # Train the model on the image tasks
+    model.fit(
+        [digit_x_train, fashion_x_train, np.zeros((digit_x_train.shape[0],boston_x_train.shape[1])), np.zeros((digit_x_train.shape[0], imdb_x_train.shape[1]))],
+        [digit_y_train, fashion_y_train, np.zeros(digit_x_train.shape[0]).reshape(-1, 1), np.zeros(digit_x_train.shape[0]).reshape(-1 ,1)],
+        epochs = 100,
+        batch_size = 512,
+        validation_split = 0.2,
+        callbacks = [callback, mann_tboard]
     )

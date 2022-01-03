@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
     model = tf.keras.models.Model(
         [digit_input, fashion_input, boston_input, imdb_input],
-        [image_output, boston_output, imdb_ouput]
+        [image_output, boston_output, imdb_output]
     )
     model.compile(
         loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],

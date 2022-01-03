@@ -95,15 +95,15 @@ if __name__ == '__main__':
     digit_x = mann.layers.SelectorLayer(0)(image_x)
     fashion_x = mann.layers.SelectorLayer(1)(image_x)
 
-    x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')([digit_x, fashion_x, boston_x, imdb_x])
+    mann_x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')([digit_x, fashion_x, boston_x, imdb_x])
 
     for _ in range(HIDDEN_NODES - 2):
-        x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')(x)
+        mann_x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')(mann_x)
 
-    digit_x = mann.layers.SelectorLayer(0)(x)
-    fashion_x = mann.layers.SelectorLayer(1)(x)
-    boston_x = mann.layers.SelectorLayer(2)(x)
-    imdb_x = mann.layers.SelectorLayer(3)(x)
+    digit_x = mann.layers.SelectorLayer(0)(mann_x)
+    fashion_x = mann.layers.SelectorLayer(1)(mann_x)
+    boston_x = mann.layers.SelectorLayer(2)(mann_x)
+    imdb_x = mann.layers.SelectorLayer(3)(mann_x)
 
     digit_output = mann.layers.MaskedDense(10, activation = 'softmax')(digit_x)
     fashion_output = mann.layers.MaskedDense(10, activation = 'softmax')(fashion_x)
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         90,
         x = [
             digit_x_train[:boston_x_train.shape[0]],
-            fasion_x_train[:boston_x_train.shape[0]],
+            fashion_x_train[:boston_x_train.shape[0]],
             boston_x_train,
             imdb_x_train[:boston_x_train.shape[0]]
         ],

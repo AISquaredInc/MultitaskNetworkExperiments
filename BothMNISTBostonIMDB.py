@@ -106,12 +106,14 @@ if __name__ == '__main__':
     imdb_x = mann.layers.SelectorLayer(3)(x)
 
     image_output = mann.layers.MultiMaskedDense(10, activation = 'softmax')([digit_x, fashion_x])
+    digit_output = mann.layers.SelectorLayer(0)(image_output)
+    fashion_output = mann.layers.SelectorLayer(1)(image_output)
     boston_output = mann.layers.MaskedDense(1, activation = 'relu')(boston_x)
     imdb_output = mann.layers.MaskedDense(1, activation = 'sigmoid')(imdb_x)
 
     model = tf.keras.models.Model(
         [digit_input, fashion_input, boston_input, imdb_input],
-        [image_output, boston_output, imdb_output]
+        [digit_output, fashion_output, boston_output, imdb_output]
     )
     model.compile(
         loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],

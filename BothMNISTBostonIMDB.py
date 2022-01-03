@@ -13,10 +13,14 @@ if __name__ == '__main__':
     (digit_x_train, digit_y_train), (digit_x_test, digit_y_test) = tf.keras.datasets.mnist.load_data()
     digit_x_train = digit_x_train.reshape((digit_x_train.shape[0], -1))/255
     digit_x_test = digit_x_test.reshape((digit_x_test.shape[0], -1))/255
+    digit_y_train = digit_y_train.reshape(-1, 1)
+    digit_y_test = digit_y_test.reshape(-1, 1)
 
     (fashion_x_train, fashion_y_train), (fashion_x_test, fashion_y_test) = tf.keras.datasets.fashion_mnist.load_data()
     fashion_x_train = fashion_x_train.reshape((fashion_x_train.shape[0], -1))/255
     fashion_x_test = fashion_x_test.reshape((fashion_x_test.shape[0], -1))/255
+    fashion_y_train = fashion_y_train.reshape(-1, 1)
+    fashion_y_test = fashion_y_test.reshape(-1, 1)
 
     (boston_x_train, boston_y_train), (boston_x_test, boston_y_test) = tf.keras.datasets.boston_housing.load_data()
     boston_x_scaler = MinMaxScaler().fit(boston_x_train)
@@ -41,6 +45,9 @@ if __name__ == '__main__':
         padding = 'post',
         truncating = 'post'
     )
+
+    imdb_y_train = imdb_y_train.reshape(-1, 1)
+    imdb_y_test = imdb_y_test.reshape(-1, 1)
 
     callback = tf.keras.callbacks.EarlyStopping(
         min_delta = 0.01,

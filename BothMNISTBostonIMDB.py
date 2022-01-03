@@ -105,9 +105,8 @@ if __name__ == '__main__':
     boston_x = mann.layers.SelectorLayer(2)(x)
     imdb_x = mann.layers.SelectorLayer(3)(x)
 
-    image_output = mann.layers.MultiMaskedDense(10, activation = 'softmax')([digit_x, fashion_x])
-    digit_output = mann.layers.SelectorLayer(0)(image_output)
-    fashion_output = mann.layers.SelectorLayer(1)(image_output)
+    digit_output = mann.layers.MaskedDense(10, activation = 'softmax')(digit_x)
+    fashion_output = mann.layers.MaskedDense(10, activation = 'softmax')(fashion_x)
     boston_output = mann.layers.MaskedDense(1, activation = 'relu')(boston_x)
     imdb_output = mann.layers.MaskedDense(1, activation = 'sigmoid')(imdb_x)
 

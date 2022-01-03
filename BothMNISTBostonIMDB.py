@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
     # Get the predictions
     image_preds = model.predict(
-        [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1])), np.zeros((digit_x_test.shape[0], imdb_x_test.shape[0]))]
+        [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1])), np.zeros((digit_x_test.shape[0], imdb_x_test.shape[1]))]
     )
     digit_preds = image_preds[0].argmax(axis = 1)
     fashion_preds = image_preds[1].argmax(axis = 1)

@@ -35,13 +35,13 @@ if __name__ == '__main__':
 
     imdb_x_train = tf.keras.preprocessing.sequence.pad_sequences(
         imdb_x_train,
-        maxlen = 512,
+        maxlen = 128,
         padding = 'post',
         truncating = 'post'
     )
     imdb_x_test = tf.keras.preprocessing.sequence.pad_sequences(
         imdb_x_test,
-        maxlen = 512,
+        maxlen = 128,
         padding = 'post',
         truncating = 'post'
     )
@@ -70,8 +70,8 @@ if __name__ == '__main__':
     )
     
     # Build the IMDB control model
-    imdb_input = tf.keras.layers.Input(512)
-    x = tf.keras.layers.Embedding(10000, 4)(imdb_input)
+    imdb_input = tf.keras.layers.Input(128)
+    x = tf.keras.layers.Embedding(10000, 2)(imdb_input)
     x = tf.keras.layers.Flatten()(x)
     for _ in range(HIDDEN_LAYERS):
         x = tf.keras.layers.Dense(HIDDEN_NODES, activation = 'relu')(x)
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     boston_x = mann.layers.MaskedDense(HIDDEN_NODES, activation = 'relu')(boston_input)
 
-    imdb_x = tf.keras.layers.Embedding(10000, 4)(imdb_input)
+    imdb_x = tf.keras.layers.Embedding(10000, 2)(imdb_input)
     imdb_x = tf.keras.layers.Flatten()(imdb_x)
     imdb_x = mann.layers.MaskedDense(HIDDEN_NODES, activation = 'relu')(imdb_x)
 
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     mann_x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')([digit_x, fashion_x, boston_x, imdb_x])
 
-    for _ in range(HIDDEN_NODES - 2):
+    for _ in range(HIDDEN_LAYERS - 2):
         mann_x = mann.layers.MultiMaskedDense(HIDDEN_NODES, activation = 'relu')(mann_x)
 
     digit_x = mann.layers.SelectorLayer(0)(mann_x)
@@ -125,6 +125,7 @@ if __name__ == '__main__':
         loss = ['sparse_categorical_crossentropy', 'sparse_categorical_crossentropy', 'mse', 'binary_crossentropy'],
         optimizer = 'adam'
     )
+    model.summary()
     model = mann.utils.mask_model(
         model,
         90,

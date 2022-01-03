@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     model = tf.keras.models.Model(imdb_input, imdb_output)
     model.compile(loss = 'binary_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
-    model.fit(imdb_x_train, imdb_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback, imdb_tboard])
+    model.fit(imdb_x_train, imdb_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback, imdb_tboard], verbose = 0)
     imdb_preds = (model.predict(imdb_x_test) >= 0.5).astype(int)
         
     print('IMDB Control Model Performance:')
@@ -154,7 +154,8 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 512,
         validation_split = 0.2,
-        callbacks = [callback, mann_tboard]
+        callbacks = [callback, mann_tboard],
+        verbose = 0
     )
 
     model.compile(
@@ -170,7 +171,8 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 32,
         validation_split = 0.2,
-        callbacks = [callback, mann_tboard]
+        callbacks = [callback, mann_tboard],
+        verbose = 0
     )
 
     model.compile(
@@ -186,7 +188,8 @@ if __name__ == '__main__':
         epochs = 100,
         batch_size = 32,
         validation_split = 0.2,
-        callbacks = [callback, mann_tboard]
+        callbacks = [callback, mann_tboard],
+        verbose = 0
     )
 
     # Get the predictions

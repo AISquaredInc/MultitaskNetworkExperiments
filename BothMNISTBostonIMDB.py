@@ -196,23 +196,29 @@ if __name__ == '__main__':
     image_preds = model.predict(
         [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1])), np.zeros((digit_x_test.shape[0], imdb_x_test.shape[1]))]
     )
+    digit_loss = tf.keras.losses.sparse_categorical_crossentropy(digit_y_test, image_preds[0])
     digit_preds = image_preds[0].argmax(axis = 1)
+    fashion_loss = tf.keras.losses.sparse_categorical_crossentropy(fashion_y_test, image_preds[1])
     fashion_preds = image_preds[1].argmax(axis = 1)
 
     boston_preds = model.predict(
         [np.zeros((boston_x_test.shape[0], digit_x_train.shape[1])), np.zeros((boston_x_test.shape[0], fashion_x_train.shape[1])), boston_x_test, np.zeros((boston_x_test.shape[0], imdb_x_train.shape[1]))],
     )[2]
 
-    imdb_preds = (model.predict(
+    imdb_preds = model.predict(
         [np.zeros((imdb_x_test.shape[0], digit_x_train.shape[1])), np.zeros((imdb_x_test.shape[0], fashion_x_train.shape[1])), np.zeros((imdb_x_test.shape[0], boston_x_train.shape[1])), imdb_x_test]
-    )[3] >= 0.5).astype(int)
+    )[3]
+    imdb_loss = tf.keras.losses.binary_crossentropy(imdb_y_test, imdb_preds)
+    imdb_preds = (imdb_preds >= 0.5).astype(int)
 
     print('Multitask Model Digit Performance:')
+    print(f'Loss: {digit_loss.numpy().mean()}')
     print(confusion_matrix(digit_y_test, digit_preds))
     print(classification_report(digit_y_test, digit_preds))
     print('\n')
 
     print('Multitask Model Fashion Performance:')
+    print(f'Loss: {fashion_loss.numpy().mean()}')
     print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
     print('\n')

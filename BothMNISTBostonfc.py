@@ -152,6 +152,8 @@ if __name__ == '__main__':
     mnist_preds = model.predict(
         [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1]))]
     )
+    digit_loss = tf.keras.losses.sparse_categorical_crossentropy(digit_y_test, mnist_preds[0])
+    fashion_loss = tf.keras.losses.sparse_categorical_crossentropy(fashion_y_test, mnist_preds[1])
     digit_preds = mnist_preds[0].argmax(axis = 1)
     fashion_preds = mnist_preds[1].argmax(axis = 1)
     boston_preds = model.predict(
@@ -163,10 +165,12 @@ if __name__ == '__main__':
     )[2]
 
     print('Multitask Model Digit Performance:')
+    print(f'Loss: {digit_loss.numpy().mean()}')
     print(confusion_matrix(digit_y_test, digit_preds))
     print(classification_report(digit_y_test, digit_preds))
     print('\n')
     print('Multitask Model Fashion Performance:')
+    print(f'Loss: {fashion_loss.numpy().mean()}')
     print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
     print('\n')

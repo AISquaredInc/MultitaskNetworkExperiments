@@ -228,5 +228,6 @@ if __name__ == '__main__':
     print('\n')
 
     print('Multitask Model IMDB Performance:')
+    print(imdb_loss.numpy().mean())
     print(confusion_matrix(imdb_y_test, imdb_preds))
     print(classification_report(imdb_y_test, imdb_preds))

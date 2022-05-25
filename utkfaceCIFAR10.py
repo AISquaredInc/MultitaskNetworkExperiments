@@ -5,7 +5,7 @@ import click
 import mann
 import os
 
-batch_size = 256
+batch_size = 128
 
 def data_generator(
         utkface_dir,

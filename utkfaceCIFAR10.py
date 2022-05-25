@@ -5,13 +5,11 @@ import click
 import mann
 import os
 
-batch_size = 128
-
 def data_generator(
         utkface_dir,
         cifar10_images,
         cifar10_labels,
-        batch_size = batch_size,
+        batch_size
         image_size = (256, 256),
         scaling = 1./255
 ):
@@ -146,12 +144,13 @@ def build_model():
 @click.command()
 @click.argument('train-dir', type = click.Path(exists = True, dir_okay = True, file_okay = False))
 @click.argument('val-dir', type = click.Path(exists = True, dir_okay = True, file_okay = False))
-def main(train_dir, val_dir):
+@click.option('--batch-size', '-b', type = int, default = 256)
+def main(train_dir, val_dir, batch_size):
     (cifar10_x_train, cifar10_y_train), (cifar10_x_test, cifar10_y_test) = tf.keras.datasets.cifar10.load_data()
     model = build_model()
 
-    train_generator = data_generator(train_dir, cifar10_x_train, cifar10_y_train)
-    val_generator = data_generator(val_dir, cifar10_x_test, cifar10_y_test)
+    train_generator = data_generator(train_dir, cifar10_x_train, cifar10_y_train, batch_size)
+    val_generator = data_generator(val_dir, cifar10_x_test, cifar10_y_test, batch_size)
     train_steps = len(os.listdir(train_dir))//batch_size
     val_steps = len(os.listdir(val_dir))//batch_size
 

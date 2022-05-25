@@ -167,6 +167,31 @@ def main(train_dir, val_dir, batch_size, limit):
         validation_steps = val_steps
     )
 
+    model = mann.utils.mask_model(
+        model,
+        75,
+        method = 'magnitude'
+    )
+
+    callback = tf.keras.callbacks.EarlyStopping(
+        monitor = 'val_loss',
+        min_delta = 0.01,
+        patience = 5,
+        restore_best_weights = True
+    )
+    
+    model.fit(
+        train_generator,
+        epochs = 100,
+        steps_per_epoch = train_steps,
+        validation_data = val_generator,
+        validation_steps = val_steps,
+        callbacks = [callback]
+    )
+
+    model = mann.utils.remove_layer_masks(model)
+    model.save('utkfaceAndCIFAR10.h5')
+    
     age_preds = []
     gender_preds = []
     ethnicity_preds = []

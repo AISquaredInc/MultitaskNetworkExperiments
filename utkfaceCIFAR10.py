@@ -186,7 +186,7 @@ def main(train_dir, val_dir, batch_size, limit):
             print(x.shape)
         
         age_preds.append(new_preds[0].argmax(axis = 1).flatten().tolist())
-        gender_preds.append(new_preds[1].argmax(axis = 1).flatten().tolist())
+        gender_preds.append((new_preds[1] >= 0.5).flatten().tolist())
         ethnicity_preds.append(new_preds[2].argmax(axis = 1).flatten().tolist())
         cifar_preds.append(new_preds[3].argmax(axis = 1).flatten().tolist())
 

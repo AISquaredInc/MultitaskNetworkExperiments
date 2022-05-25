@@ -39,7 +39,7 @@ def data_generator(
                 np.random.shuffle(files)
                 utkface_idx = 0
             img = tf.keras.preprocessing.image.load_img(
-                os.path.join(utkface_dir, files[i]),
+                os.path.join(utkface_dir, files[utkface_idx]),
                 target_size = image_size
             )
             utkface_img = np.array(img)*scaling

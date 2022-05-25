@@ -9,7 +9,7 @@ def data_generator(
         utkface_dir,
         cifar10_images,
         cifar10_labels,
-        batch_size
+        batch_size,
         image_size = (256, 256),
         scaling = 1./255
 ):

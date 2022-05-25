@@ -107,15 +107,15 @@ def build_model():
     cifar10_flatten = tf.keras.layers.Flatten()(cifar10_pool)
 
     x = mann.layers.MultiMaskedDense(
-        256,
+        128,
         activation = 'relu'
     )([utkface_flatten, utkface_flatten, utkface_flatten, cifar10_flatten])
     x = mann.layers.MultiMaskedDense(
-        256,
+        128,
         activation = 'relu'
     )(x)
     x = mann.layers.MultiMaskedDense(
-        256,
+        128,
         activation = 'relu'
     )(x)
     age_selector = mann.layers.SelectorLayer(0)(x)

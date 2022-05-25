@@ -43,10 +43,10 @@ def data_generator(
                 target_size = image_size
             )
             utkface_img = np.array(img)*scaling
-            age = int(files[i].split('_')[0])
+            age = int(files[utkface_idx].split('_')[0])
             age_label = sum([age > cutoff for cutoff in cutoffs])
-            gender = int(files[i].split('_')[1])
-            ethnicity = int(files[i].split('_')[2])
+            gender = int(files[utkface_idx].split('_')[1])
+            ethnicity = int(files[utkface_idx].split('_')[2])
             utkface_batch.append(utkface_img)
             ages.append(age_label)
             genders.append(gender)

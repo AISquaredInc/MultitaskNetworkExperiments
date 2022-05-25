@@ -190,11 +190,16 @@ def main(train_dir, val_dir, batch_size, limit):
         gender_labels.append(new_labels[1].flatten().tolist())
         ethnicity_labels.append(new_labels[2].flatten().tolist())
         cifar_labels.append(new_labels[3].flatten().tolist())
-
+        
     age_preds = np.asarray(age_preds)
     gender_preds = np.asarray(gender_preds)
     ethnicity_preds = np.asarray(ethnicity_preds)
-    cifar_preds = np.asarray(ethnicity_preds)
+    cifar_preds = np.asarray(cifar_preds)
+
+    age_labels = np.asarray(age_labels)
+    gender_labels = np.asarray(gender_labels)
+    ethnicity_labels = np.asarray(ethnicity_labels)
+    cifar_labels = np.asarray(cifar_labels)
     
     print(classification_report(age_labels, age_preds))
     print(classification_report(gender_labels, gender_preds))

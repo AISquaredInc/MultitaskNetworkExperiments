@@ -181,15 +181,15 @@ def main(train_dir, val_dir, batch_size, limit):
         new_data, new_labels = next(val_generator)
         new_preds = model.predict(new_data)
 
-        age_preds.append(new_preds[0].argmax(axis = 1).tolist())
-        gender_preds.append(new_preds[1].argmax(axis = 1).tolist())
-        ethnicity_preds.append(new_preds[2].argmax(axis = 1).tolist())
-        cifar_preds.append(new_preds[3].argmax(axis = 1).tolist())
+        age_preds.append(new_preds[0].argmax(axis = 1).flatten().tolist())
+        gender_preds.append(new_preds[1].argmax(axis = 1).flatten().tolist())
+        ethnicity_preds.append(new_preds[2].argmax(axis = 1).flatten().tolist())
+        cifar_preds.append(new_preds[3].argmax(axis = 1).flatten().tolist())
 
-        age_labels.append(new_labels[0].tolist())
-        gender_labels.append(new_labels[1].tolist())
-        ethnicity_labels.append(new_labels[2].tolist())
-        cifar_labels.append(new_labels[3].tolist())
+        age_labels.append(new_labels[0].flatten().tolist())
+        gender_labels.append(new_labels[1].flatten().tolist())
+        ethnicity_labels.append(new_labels[2].flatten().tolist())
+        cifar_labels.append(new_labels[3].flatten().tolist())
 
     age_preds = np.asarray(age_preds)
     gender_preds = np.asarray(gender_preds)

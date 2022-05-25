@@ -162,5 +162,34 @@ def main(train_dir, val_dir, batch_size):
         validation_steps = val_steps
     )
 
+    age_preds = []
+    gender_preds = []
+    ethnicity_preds = []
+    cifar_preds = []
+
+    age_labels = []
+    gender_labels = []
+    ethnicity_labels = []
+    cifar_labels = []
+    
+    for _ in range(val_steps):
+        new_data, new_labels = next(val_generator)
+        new_preds = model.predict(new_data)
+
+        age_preds.append(new_preds[0].argmax(axis = 1).tolist())
+        gender_preds.append(new_preds[1].argmax(axis = 1).tolist())
+        ethnicity_preds.append(new_preds[2].argmax(axis = 1).tolist())
+        cifar_preds.append(new_preds[3].argmax(axis = 1).tolist())
+
+        age_labels.append(new_labels[0].tolist())
+        gender_labels.append(new_labels[1].tolist())
+        ethnicity_labels.append(new_labels[2].tolist())
+        cifar_labels.append(new_labels[3].tolist())
+
+    print(classification_report(age_labels, age_preds))
+    print(classification_report(gender_labels, gender_preds))
+    print(classification_report(ethnicity_labels, ethnicity_preds))
+    print(classification_report(cifar_labels, cifar_preds))
+
 if __name__ == '__main__':
     main()

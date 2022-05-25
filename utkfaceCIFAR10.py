@@ -172,7 +172,17 @@ def main(train_dir, val_dir, batch_size, limit):
         75,
         method = 'magnitude'
     )
-
+    model.compile(
+        loss = [
+            'sparse_categorical_crossentropy',
+            'binary_crossentropy',
+            'sparse_categorical_crossentropy',
+            'sparse_categorical_crossentropy'
+        ],
+        metrics = ['accuracy'],
+        optimizer = 'adam'
+    )
+    
     callback = tf.keras.callbacks.EarlyStopping(
         monitor = 'val_loss',
         min_delta = 0.01,

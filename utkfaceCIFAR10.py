@@ -61,7 +61,7 @@ def data_generator(
             utkface_idx += 1
             cifar10_idx += 1
 
-        yield ([utkface_batch, cifar10_batch], [ages, genders, ethnicities, cifar10_batch_labels])
+        yield ([np.asarray(utkface_batch), np.asarray(cifar10_batch)], [np.asarray(ages), np.asarray(genders), np.asarray(ethnicities), np.asarray(cifar10_batch_labels)])
 
 def build_model():
     utkface_input = tf.keras.layers.Input((256, 256, 3))

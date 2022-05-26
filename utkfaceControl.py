@@ -54,7 +54,7 @@ def build_model(output_shape):
         16,
         3,
         activation = 'relu'
-    )(utkface_input)
+    )(input_layer)
     x = tf.keras.layers.Conv2D(
         16,
         3,

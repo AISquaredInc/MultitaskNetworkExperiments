@@ -49,7 +49,7 @@ def data_generator(
         yield np.asarray(utkface_batch), np.asarray(labels)
 
 def build_model(output_shape):
-    utkface_input = tf.keras.layers.Input((256, 256, 3))
+    input_layer = tf.keras.layers.Input((256, 256, 3))
     x = tf.keras.layers.Conv2D(
         16,
         3,

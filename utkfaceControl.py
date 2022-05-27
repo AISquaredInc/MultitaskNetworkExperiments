@@ -174,7 +174,7 @@ def main(train_dir, val_dir, batch_size, limit):
     # get predictions from all models
     age_preds, age_labels = [], []
     gender_preds, gender_labels = [], []
-    ethnicity_preds, ethnicity_labels = []
+    ethnicity_preds, ethnicity_labels = [], []
     
     for _ in range(val_steps):
         age_data, age_labs = next(age_val_generator)

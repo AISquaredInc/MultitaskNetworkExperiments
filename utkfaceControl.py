@@ -120,7 +120,7 @@ def build_model(output_shape):
 def main(train_dir, val_dir, batch_size, limit):
     age_model = build_model(10)
     gender_model = build_model(2)
-    model = build_model(5)
+    ethnicity_model = build_model(5)
 
     age_train_generator = data_generator(train_dir, 'age', batch_size)
     gender_train_generator = data_generator(train_dir, 'gender', batch_size)

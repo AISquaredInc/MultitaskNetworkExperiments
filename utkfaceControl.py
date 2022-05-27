@@ -197,12 +197,10 @@ def main(train_dir, val_dir, batch_size, limit):
     age_preds = np.asarray(age_preds)
     gender_preds = np.asarray(gender_preds)
     ethnicity_preds = np.asarray(ethnicity_preds)
-    cifar_preds = np.asarray(cifar_preds)
 
     age_labels = np.asarray(age_labels)
     gender_labels = np.asarray(gender_labels)
     ethnicity_labels = np.asarray(ethnicity_labels)
-    cifar_labels = np.asarray(cifar_labels)
 
     print('Age:')
     print(confusion_matrix(age_labels, age_preds))
@@ -215,10 +213,6 @@ def main(train_dir, val_dir, batch_size, limit):
     print('Ethnicity:')
     print(confusion_matrix(ethnicity_labels, ethnicity_preds))
     print(classification_report(ethnicity_labels, ethnicity_preds))
-    print('\n\n')
-    print('CIFAR10:')
-    print(confusion_matrix(cifar_labels, cifar_preds))
-    print(classification_report(cifar_labels, cifar_preds))
 
 if __name__ == '__main__':
     main()

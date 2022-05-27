@@ -119,7 +119,7 @@ def build_model(output_shape):
 @click.option('--limit', '-l', type = int, default = None)
 def main(train_dir, val_dir, batch_size, limit):
     age_model = build_model(10)
-    gender_model = build_model(2)
+    gender_model = build_model(1)
     ethnicity_model = build_model(5)
 
     age_train_generator = data_generator(train_dir, 'age', batch_size)

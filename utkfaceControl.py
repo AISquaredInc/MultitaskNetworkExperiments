@@ -157,7 +157,7 @@ def main(train_dir, val_dir, batch_size, limit):
         gender_train_generator,
         epochs = 100,
         steps_per_epoch = train_steps,
-        validation_data = age_val_generator,
+        validation_data = gender_val_generator,
         validation_steps = val_steps,
         callbacks = [callback]
     )
@@ -166,7 +166,7 @@ def main(train_dir, val_dir, batch_size, limit):
         ethnicity_train_generator,
         epochs = 100,
         steps_per_epoch = train_steps,
-        validation_data = age_val_generator,
+        validation_data = ethnicity_val_generator,
         validation_steps = val_steps,
         callbacks = [callback]
     )

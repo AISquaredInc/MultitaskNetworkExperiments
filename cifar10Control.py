@@ -70,10 +70,8 @@ def build_model(output_shape):
     return model
         
 @click.command()
-@click.argument('train-dir', type = click.Path(exists = True, dir_okay = True, file_okay = False))
-@click.argument('val-dir', type = click.Path(exists = True, dir_okay = True, file_okay = False))
 @click.option('--batch-size', '-b', type = int, default = 256)
-def main(train_dir, val_dir, batch_size, limit):
+def main(batch_size):
 
     model = build_model(10)
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()

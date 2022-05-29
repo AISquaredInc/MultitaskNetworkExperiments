@@ -214,5 +214,9 @@ def main(train_dir, val_dir, batch_size, limit):
     print(confusion_matrix(ethnicity_labels, ethnicity_preds))
     print(classification_report(ethnicity_labels, ethnicity_preds))
 
+    age_model.save('age_model.h5')
+    gender_model.save('gender_model.h5')
+    ethnicity_model.save('ethnicity_model.h5')
+
 if __name__ == '__main__':
     main()

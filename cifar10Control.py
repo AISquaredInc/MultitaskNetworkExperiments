@@ -75,8 +75,8 @@ def main(batch_size):
 
     model = build_model(10)
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
-    x_train = tf.keras.image.resize(x_train, (256, 256))/255
-    x_test = tf.keras.image.resize(x_test, (256, 256))/255
+    x_train = tf.image.resize(x_train, (256, 256))/255
+    x_test = tf.image.resize(x_test, (256, 256))/255
     
     callback = tf.keras.callbacks.EarlyStopping(
         monitor = 'val_loss',

@@ -74,6 +74,7 @@ def build_model(output_shape):
 def main(batch_size):
 
     model = build_model(10)
+    model.save('cifar10control.h5')
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
     x_train = tf.image.resize(x_train, (256, 256))/255
     x_test = tf.image.resize(x_test, (256, 256))/255

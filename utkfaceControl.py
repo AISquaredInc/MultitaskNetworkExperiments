@@ -53,45 +53,53 @@ def build_model(output_shape):
     x = tf.keras.layers.Conv2D(
         16,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(input_layer)
     x = tf.keras.layers.Conv2D(
         16,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         32,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         32,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         64,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         64,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         128,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         128,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Flatten()(x)

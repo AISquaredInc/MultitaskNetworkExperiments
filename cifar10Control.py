@@ -15,40 +15,47 @@ def build_model(output_shape):
     x = tf.keras.layers.Conv2D(
         16,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         32,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         32,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         64,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         64,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Conv2D(
         128,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.Conv2D(
         128,
         3,
-        activation = 'relu'
+        activation = 'relu',
+        padding = 'same'
     )(x)
     x = tf.keras.layers.MaxPool2D()(x)
     x = tf.keras.layers.Flatten()(x)
@@ -98,7 +105,7 @@ def main(batch_size)
 
     print(confusion_matrix(y_test, preds))
     print(classification_report(y_test, preds))
-    model.save('cifar10Control.py')
+    model.save('cifar10Control.h5')
 
 if __name__ == '__main__':
     main()

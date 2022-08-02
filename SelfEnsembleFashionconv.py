@@ -202,7 +202,7 @@ if __name__ == '__main__':
     input4 = tf.keras.layers.Input(x_train.shape[1:])
     input5 = tf.keras.layers.Input(x_train.shape[1:])
     x = mann.layers.SparseMultiConv.from_layer(model.layers[5])([input1, input2, input3, input4, input5])
-    x = mann.layers.SparsemultiConv.from_layer(model.layers[6])(x)
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[6])(x)
     sel1 = mann.layers.SelectorLayer(0)(x)
     sel2 = mann.layers.SelectorLayer(1)(x)
     sel3 = mann.layers.SelectorLayer(2)(x)
@@ -270,7 +270,7 @@ if __name__ == '__main__':
     flat3 = tf.keras.layers.Flatten()(pool3)
     flat4 = tf.keras.layers.Flatten()(pool4)
     flat5 = tf.keras.layers.Flatten()(pool5)
-    x = mann.layers.SparseMultiDense.from_layer(model.layers[34])(x)
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[34])([flat1, flat2, flat3, flat4, flat5])
     x = mann.layers.SparseMultiDense.from_layer(model.layers[35])(x)
     output_layer = mann.layers.SparseMultiDense.from_layer(model.layers[36])(x)
     model = tf.keras.models.Model(

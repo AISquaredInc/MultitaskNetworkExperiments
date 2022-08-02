@@ -1,8 +1,9 @@
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
-import mann
+import beyondml.tflow as mann
 import os
+import pickle
 
 if __name__ == '__main__':
 
@@ -98,6 +99,7 @@ if __name__ == '__main__':
         verbose = 0
     )
     digit_preds = model.predict(digit_x_test).argmax(axis = 1)
+    model.save('digit_model.h5')
     
     print('Dedicated Model Digit Performance:')
     print(confusion_matrix(digit_y_test, digit_preds))
@@ -161,6 +163,7 @@ if __name__ == '__main__':
         verbose = 0
     )
     fashion_preds = model.predict(fashion_x_test).argmax(axis = 1)
+    model.save('fashion_model.h5')
 
     print('Dedicated Model Fashion Performance:')
     print(confusion_matrix(fashion_y_test, fashion_preds))
@@ -255,7 +258,7 @@ if __name__ == '__main__':
     )
 
     model = mann.utils.utils.remove_layer_masks(model)
-
+    model.save('combined_model.h5')
     preds = model.predict([digit_x_test, fashion_x_test])
     digit_preds = preds[0].argmax(axis = 1)
     fashion_preds = preds[1].argmax(axis = 1)
@@ -267,3 +270,58 @@ if __name__ == '__main__':
     print('Multitask Model Fashion Performance:')
     print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
+
+    digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
+    fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[2])([digit_input, fashion_input])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[3])(x)
+    digit_selector1 = mann.layers.SelectorLayer(0)(x)
+    fashion_selector1 = mann.layers.SelectorLayer(1)(x)
+    digit_maxpool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(digit_selector1)
+    fashion_maxpool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(fashion_selector1)
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[8])([digit_maxpool1, fashion_maxpool1])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[9])(x)
+    digit_selector2 = mann.layers.SelectorLayer(0)(x)
+    fashion_selector2 = mann.layers.SelectorLayer(1)(x)
+    digit_maxpool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(digit_selector2)
+    fashion_maxpool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(fashion_selector2)
+    digit_flatten = tf.keras.layers.Flatten()(digit_maxpool2)
+    fashion_flatten = tf.keras.layers.Flatten()(fashion_maxpool2)
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[16])([digit_flatten, fashion_flatten])
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[17])(x)
+    output_layer = mann.layers.SparseMultiDense.from_layer(model.layers[-1])(x)
+    model = tf.keras.models.Model(
+        [digit_input, fashion_input],
+        output_layer
+    )
+
+    preds = model.predict([digit_x_test, fashion_x_test])
+    digit_preds = preds[0].argmax(axis = 1)
+    fashion_preds = preds[1].argmax(axis = 1)
+    
+    print('Sparse Multitask Model Digit Performance:')
+    print(confusion_matrix(digit_y_test, digit_preds))
+    print(classification_report(digit_y_test, digit_preds))
+    print('\n')
+    print('Sparse Multitask Model Fashion Performance:')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
+
+    with open('sparse_model.pkl', 'wb') as f:
+        pickle.dump(model, f)

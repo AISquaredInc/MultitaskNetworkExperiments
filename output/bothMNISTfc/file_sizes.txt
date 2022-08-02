@@ -1,0 +1,7 @@
+total 426840
+-rw-r--r--@ 1 jwrenn4  staff      7606 Jan  3  2022 BothMNISTfc.txt
+-rw-r--r--  1 jwrenn4  staff  46434664 Aug  2 10:08 combined_model.h5
+-rw-r--r--  1 jwrenn4  staff  69668728 Aug  2 10:08 digit_model.h5
+-rw-r--r--  1 jwrenn4  staff  69668760 Aug  2 10:08 fashion_model.h5
+-rw-r--r--  1 jwrenn4  staff         0 Aug  2 11:29 file_sizes.txt
+-rw-r--r--  1 jwrenn4  staff  32757990 Aug  2 10:08 sparse_model.pkl

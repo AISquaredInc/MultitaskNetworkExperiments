@@ -131,3 +131,6 @@ dmypy.json
 # Don't save model files
 *.h5
 *.pkl
+
+# Don't save log files
+logs/

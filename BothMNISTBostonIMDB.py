@@ -2,8 +2,9 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 import numpy as np
-import mann
+import beyondml.tflow as mann
 import os
+import pickle
 
 if __name__ == '__main__':
 
@@ -81,6 +82,7 @@ if __name__ == '__main__':
     model.compile(loss = 'binary_crossentropy', metrics = ['accuracy'], optimizer = 'adam')
     model.fit(imdb_x_train, imdb_y_train, epochs = 100, batch_size = 512, validation_split = 0.2, callbacks = [callback, imdb_tboard], verbose = 0)
     imdb_preds = (model.predict(imdb_x_test) >= 0.5).astype(int)
+    model.save('imdb_model.h5')
         
     print('IMDB Control Model Performance:')
     print(confusion_matrix(imdb_y_test, imdb_preds))
@@ -210,6 +212,7 @@ if __name__ == '__main__':
     )[3]
     imdb_loss = tf.keras.losses.binary_crossentropy(imdb_y_test, imdb_preds)
     imdb_preds = (imdb_preds >= 0.5).astype(int)
+    model.save('multitask_model.h5')
 
     print('Multitask Model Digit Performance:')
     print(f'Loss: {digit_loss.numpy().mean()}')
@@ -231,3 +234,81 @@ if __name__ == '__main__':
     print(imdb_loss.numpy().mean())
     print(confusion_matrix(imdb_y_test, imdb_preds))
     print(classification_report(imdb_y_test, imdb_preds))
+
+    digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
+    fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
+    boston_input = tf.keras.layers.Input(boston_x_train.shape[1:])
+    imdb_input = tf.keras.layers.Input(imdb_x_train.shape[1:])
+
+    boston_x = mann.layers.SparseDense.from_layer(model.layers[9])(boston_input)
+
+    imdb_x = tf.keras.layers.Embedding(10000, 2)(imdb_input)
+    imdb_x = tf.keras.layers.Flatten()(imdb_x)
+    imdb_x = mann.layers.SparseDense.from_layer(model.layers[10])(imdb_x)
+
+    image_x = mann.layers.SparseMultiDense.from_layer(model.layers[4])([digit_input, fashion_input])
+    digit_x = mann.layers.SelectorLayer(0)(image_x)
+    fashion_x = mann.layers.SelectorLayer(1)(image_x)
+
+    mann_x = mann.layers.SparseMultiDense.from_layer(model.layers[11])([digit_x, fashion_x, boston_x, imdb_x])
+
+    for i in range(HIDDEN_LAYERS - 2):
+        mann_x = mann.layers.SparseMultiDense.from_layer(model.layers[i + 12])(mann_x)
+
+    digit_x = mann.layers.SelectorLayer(0)(mann_x)
+    fashion_x = mann.layers.SelectorLayer(1)(mann_x)
+    boston_x = mann.layers.SelectorLayer(2)(mann_x)
+    imdb_x = mann.layers.SelectorLayer(3)(mann_x)
+
+    digit_output = mann.layers.SparseDense.from_layer(model.layers[-4])(digit_x)
+    fashion_output = mann.layers.SparseDense.from_layer(model.layers[-3])(fashion_x)
+    boston_output = mann.layers.SparseDense.from_layer(model.layers[-2])(boston_x)
+    imdb_output = mann.layers.SparseDense.from_layer(model.layers[-1])(imdb_x)
+
+    sparse_model = tf.keras.models.Model(
+        [digit_input, fashion_input, boston_input, imdb_input],
+        [digit_output, fashion_output, boston_output, imdb_output]
+    )
+    sparse_model.layers[5].set_weights(model.layers[5].get_weights())
+
+    image_preds = sparse_model.predict(
+        [digit_x_test, fashion_x_test, np.zeros((digit_x_test.shape[0], boston_x_test.shape[1])), np.zeros((digit_x_test.shape[0], imdb_x_test.shape[1]))]
+    )
+    digit_loss = tf.keras.losses.sparse_categorical_crossentropy(digit_y_test, image_preds[0])
+    digit_preds = image_preds[0].argmax(axis = 1)
+    fashion_loss = tf.keras.losses.sparse_categorical_crossentropy(fashion_y_test, image_preds[1])
+    fashion_preds = image_preds[1].argmax(axis = 1)
+
+    boston_preds = sparse_model.predict(
+        [np.zeros((boston_x_test.shape[0], digit_x_train.shape[1])), np.zeros((boston_x_test.shape[0], fashion_x_train.shape[1])), boston_x_test, np.zeros((boston_x_test.shape[0], imdb_x_train.shape[1]))],
+    )[2]
+
+    imdb_preds = sparse_model.predict(
+        [np.zeros((imdb_x_test.shape[0], digit_x_train.shape[1])), np.zeros((imdb_x_test.shape[0], fashion_x_train.shape[1])), np.zeros((imdb_x_test.shape[0], boston_x_train.shape[1])), imdb_x_test]
+    )[3]
+    imdb_loss = tf.keras.losses.binary_crossentropy(imdb_y_test, imdb_preds)
+    imdb_preds = (imdb_preds >= 0.5).astype(int)
+
+    print('Sparse Multitask Model Digit Performance:')
+    print(f'Loss: {digit_loss.numpy().mean()}')
+    print(confusion_matrix(digit_y_test, digit_preds))
+    print(classification_report(digit_y_test, digit_preds))
+    print('\n')
+
+    print('Sparse Multitask Model Fashion Performance:')
+    print(f'Loss: {fashion_loss.numpy().mean()}')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
+    print('\n')
+
+    print('Sparse Multitask Model Boston Performance:')
+    print(tf.keras.losses.mse(boston_y_test, boston_preds).numpy().mean())
+    print('\n')
+
+    print('Sparse Multitask Model IMDB Performance:')
+    print(imdb_loss.numpy().mean())
+    print(confusion_matrix(imdb_y_test, imdb_preds))
+    print(classification_report(imdb_y_test, imdb_preds))
+    
+    with open('sparse_model.pkl', 'wb') as f:
+        pickle.dump(sparse_model, f)

@@ -1,0 +1,6 @@
+total 587796
+-rw-r--r-- 1 jwrenn4 jwrenn4      3517 Jan 19  2022 BothMNISTBostonIMDB.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4         0 Aug  3 10:24 file_sizes.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4  63470752 Aug  3 09:59 imdb_model.h5
+-rw-r--r-- 1 jwrenn4 jwrenn4 350509300 Aug  3 10:12 multitask_model.h5
+-rw-r--r-- 1 jwrenn4 jwrenn4 187914470 Aug  3 10:13 sparse_model.pkl

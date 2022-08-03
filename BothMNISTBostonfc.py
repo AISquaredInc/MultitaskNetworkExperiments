@@ -182,19 +182,19 @@ if __name__ == '__main__':
     digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
     fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
     boston_input = tf.keras.layers.Input(boston_x_train.shape[1:])
-    boston_reshape = mann.layers.SparseDense.from_layer(model.layers[3])
+    boston_reshape = mann.layers.SparseDense.from_layer(model.layers[3])(boston_input)
     
-    x = mann.layers.SparseMultiDense.from_layer(model.layers[4])
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[4])([digit_input, fashion_input, boston_reshape])
     for i in range(HIDDEN_LAYERS - 1):
-        x = mann.layers.SparseMultiDense.from_layer(model.layers[i + 5])
+        x = mann.layers.SparseMultiDense.from_layer(model.layers[i + 5])(x)
         
     digit_selector = mann.layers.SelectorLayer(0)(x)
     fashion_selector = mann.layers.SelectorLayer(1)(x)
     boston_selector = mann.layers.SelectorLayer(2)(x)
     
-    digit_output = mann.layers.SparseDense.from_layer(model.layers[-3])
-    fashion_output = mann.layers.SparseDense.from_layer(model.layers[-2])
-    boston_output = mann.layers.SparseDense.from_layer(model.layers[-1])
+    digit_output = mann.layers.SparseDense.from_layer(model.layers[-3])(digit_selector)
+    fashion_output = mann.layers.SparseDense.from_layer(model.layers[-2])(fashion_selector)
+    boston_output = mann.layers.SparseDense.from_layer(model.layers[-1])(boston_selector)
 
     model = tf.keras.models.Model([digit_input, fashion_input, boston_input], [digit_output, fashion_output, boston_output])
 

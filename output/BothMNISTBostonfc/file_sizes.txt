@@ -1,0 +1,6 @@
+total 184060
+-rw-r--r-- 1 jwrenn4 jwrenn4     2707 Jan 19  2022 BothMNISTBostonfc.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4 69699440 Aug  3 07:17 boston_model.h5
+-rw-r--r-- 1 jwrenn4 jwrenn4        0 Aug  3 07:27 file_sizes.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4 69656184 Aug  3 07:22 multitask_model.h5
+-rw-r--r-- 1 jwrenn4 jwrenn4 49111270 Aug  3 07:22 sparse_model.pkl

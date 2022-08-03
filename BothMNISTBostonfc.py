@@ -2,7 +2,8 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 import numpy as np
-import mann
+import beyondml.tflow as mann
+import pickle
 import os
 
 
@@ -59,6 +60,7 @@ if __name__ == '__main__':
     model.fit(boston_x_train, boston_y_train, epochs = 100, batch_size = 32, validation_split = 0.2, callbacks = [callback, boston_tboard], verbose = 0)
     boston_performance = model.evaluate(boston_x_test, boston_y_test, verbose = 0)
     print(f'Boston Dedicated Model Loss: {boston_performance}')
+    model.save('boston_model.h5')
 
     # Multitask Model
     digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
@@ -163,6 +165,7 @@ if __name__ == '__main__':
             boston_x_test
         ]
     )[2]
+    model.save('multitask_model.h5')
 
     print('Multitask Model Digit Performance:')
     print(f'Loss: {digit_loss.numpy().mean()}')
@@ -175,3 +178,37 @@ if __name__ == '__main__':
     print(classification_report(fashion_y_test, fashion_preds))
     print('\n')
     print(f'Multitask Model Boston Loss {tf.keras.losses.mse(boston_y_test, boston_preds).numpy().mean()}')
+
+    digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
+    fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
+    boston_input = tf.keras.layers.Input(boston_x_train.shape[1:])
+    boston_reshape = mann.layers.SparseDense.from_layer(model.layers[3])
+    
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[4])
+    for i in range(HIDDEN_LAYERS - 1):
+        x = mann.layers.SparseMultiDense.from_layer(model.layers[i + 5])
+        
+    digit_selector = mann.layers.SelectorLayer(0)(x)
+    fashion_selector = mann.layers.SelectorLayer(1)(x)
+    boston_selector = mann.layers.SelectorLayer(2)(x)
+    
+    digit_output = mann.layers.SparseDense.from_layer(model.layers[-3])
+    fashion_output = mann.layers.SparseDense.from_layer(model.layers[-2])
+    boston_output = mann.layers.SparseDense.from_layer(model.layers[-1])
+
+    model = tf.keras.models.Model([digit_input, fashion_input, boston_input], [digit_output, fashion_output, boston_output])
+
+    print('Sparse Multitask Model Digit Performance:')
+    print(f'Loss: {digit_loss.numpy().mean()}')
+    print(confusion_matrix(digit_y_test, digit_preds))
+    print(classification_report(digit_y_test, digit_preds))
+    print('\n')
+    print('Sparse Multitask Model Fashion Performance:')
+    print(f'Loss: {fashion_loss.numpy().mean()}')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
+    print('\n')
+    print(f'Sparse Multitask Model Boston Loss {tf.keras.losses.mse(boston_y_test, boston_preds).numpy().mean()}')
+
+    with open('sparse_model.pkl', 'wb') as f:
+        pickle.dump(model, f)

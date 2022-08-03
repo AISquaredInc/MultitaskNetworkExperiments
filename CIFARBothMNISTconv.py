@@ -1,8 +1,9 @@
 from sklearn.metrics import confusion_matrix, classification_report
+import beyondml.tflow as mann
 import tensorflow as tf
 from tqdm import tqdm
 import numpy as np
-import mann
+import pickle
 import cv2
 import os
 
@@ -78,6 +79,8 @@ if __name__ == '__main__':
     print(confusion_matrix(cifar_y_test, cifar_preds))
     print(classification_report(cifar_y_test, cifar_preds))
     print('\n')
+
+    model.save('cifar_model.h5')
     
     cifar_input = tf.keras.layers.Input(cifar_x_train.shape[1:])
     digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
@@ -198,6 +201,7 @@ if __name__ == '__main__':
     fashion_loss = tf.keras.losses.sparse_categorical_crossentropy(fashion_y_test, fashion_preds)
     digit_preds = digit_preds.argmax(axis = 1)
     fashion_preds = fashion_preds.argmax(axis = 1)
+    model.save('multitask_model.h5')
 
     print('Multitask Model CIFAR Performance:')
     print(f'Loss: {cifar_loss.numpy().mean()}')
@@ -214,3 +218,97 @@ if __name__ == '__main__':
     print(f'Loss: {fashion_loss.numpy().mean()}')
     print(confusion_matrix(fashion_y_test, fashion_preds))
     print(classification_report(fashion_y_test, fashion_preds))
+
+    cifar_input = tf.keras.layers.Input(cifar_x_train.shape[1:])
+    digit_input = tf.keras.layers.Input(digit_x_train.shape[1:])
+    fashion_input = tf.keras.layers.Input(fashion_x_train.shape[1:])
+    
+    cifar_conv = mann.layers.SparseConv.from_layer(model.layers[3])(cifar_input)
+    mnist_conv = mann.layers.SparseMultiConv.from_layer(model.layers[4])([digit_input, fashion_input])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[5])([cifar_conv] + mnist_conv)
+    sel1 = mann.layers.SelectorLayer(0)(x)
+    sel2 = mann.layers.SelectorLayer(1)(x)
+    sel3 = mann.layers.SelectorLayer(2)(x)
+    pool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel1)
+    pool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel2)
+    pool3 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel3)
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[12])([pool1, pool2, pool3])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[13])(x)
+    sel1 = mann.layers.SelectorLayer(0)(x)
+    sel2 = mann.layers.SelectorLayer(1)(x)
+    sel3 = mann.layers.SelectorLayer(2)(x)
+    pool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel1)
+    pool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel2)
+    pool3 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel3)
+    flat1 = tf.keras.layers.Flatten()(pool1)
+    flat2 = tf.keras.layers.Flatten()(pool2)
+    flat3 = tf.keras.layers.Flatten()(pool3)
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[23])(
+        [
+            flat1,
+            flat2,
+            flat3
+        ]
+    )
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[24])(x)
+    output_layer = mann.layers.SparseMultiDense.from_layer(model.layers[25])(x)
+    model = tf.keras.models.Model(
+        [cifar_input, digit_input, fashion_input],
+        output_layer
+    )
+
+    cifar_preds = model.predict(
+        [cifar_x_test, digit_x_test[:cifar_x_test.shape[0]], fashion_x_test[:cifar_x_test.shape[0]]],
+        )[0]
+    cifar_loss = tf.keras.losses.sparse_categorical_crossentropy(cifar_y_test, cifar_preds)
+    cifar_preds = cifar_preds.argmax(axis = 1)
+    digit_preds, fashion_preds = model.predict(
+        [np.zeros((10000,) + cifar_x_test.shape[1:]), digit_x_test, fashion_x_test]
+    )[-2:]
+    digit_loss = tf.keras.losses.sparse_categorical_crossentropy(digit_y_test, digit_preds)
+    fashion_loss = tf.keras.losses.sparse_categorical_crossentropy(fashion_y_test, fashion_preds)
+    digit_preds = digit_preds.argmax(axis = 1)
+    fashion_preds = fashion_preds.argmax(axis = 1)
+
+    print('Sparse Multitask Model CIFAR Performance:')
+    print(f'Loss: {cifar_loss.numpy().mean()}')
+    print(confusion_matrix(cifar_y_test, cifar_preds))
+    print(classification_report(cifar_y_test, cifar_preds))
+    print('\n')
+    
+    print('Sparse Multitask Model Digit Performance:')
+    print(f'Loss: {digit_loss.numpy().mean()}')
+    print(confusion_matrix(digit_y_test, digit_preds))
+    print(classification_report(digit_y_test, digit_preds))
+
+    print('Sparse Multitask Model Fashion Performance:')
+    print(f'Loss: {fashion_loss.numpy().mean()}')
+    print(confusion_matrix(fashion_y_test, fashion_preds))
+    print(classification_report(fashion_y_test, fashion_preds))
+
+    with open('sparse_model.pkl', 'wb') as f:
+        pickle.dump(model, f)

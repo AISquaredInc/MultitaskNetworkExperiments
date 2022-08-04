@@ -1,0 +1,5 @@
+total 210992
+-rw-r--r-- 1 jwrenn4 jwrenn4      1248 Jan 19  2022 EasyHardFashionSplit.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4         0 Aug  4 09:56 file_sizes.txt
+-rw-r--r-- 1 jwrenn4 jwrenn4  89716856 Aug  4 09:54 multitask_model.h5
+-rw-r--r-- 1 jwrenn4 jwrenn4 126331110 Aug  4 09:54 sparse_model.pkl

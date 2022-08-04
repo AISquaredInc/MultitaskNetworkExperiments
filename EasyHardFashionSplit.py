@@ -145,9 +145,9 @@ if __name__ == '__main__':
         optimizer = 'adam'
     )
     model.fit(
-        [easy_x_train[:1000], hard_x_train[:1000]],
-        [easy_y_train[:1000], hard_y_train[:1000]],
-        epochs = 1,
+        [easy_x_train, hard_x_train],
+        [easy_y_train, hard_y_train],
+        epochs = 100,
         batch_size = 512,
         callbacks = [callback, mann_tboard],
         validation_split = 0.2,
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         strides = 1,
         padding = 'valid'
     )(sel2)
-    x = mann.layers.SparseMultiConv.from_layer(model.layers[8])([sel1, sel2])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[8])([pool1, pool2])
     x = mann.layers.SparseMultiConv.from_layer(model.layers[9])(x)
     sel1 = mann.layers.SelectorLayer(0)(x)
     sel2 = mann.layers.SelectorLayer(1)(x)

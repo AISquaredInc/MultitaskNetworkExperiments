@@ -1,7 +1,8 @@
 from sklearn.metrics import confusion_matrix, classification_report
+import beyondml.tflow as mann
 import tensorflow as tf
 import numpy as np
-import mann
+import pickle
 import os
 
 if __name__ == '__main__':
@@ -144,9 +145,9 @@ if __name__ == '__main__':
         optimizer = 'adam'
     )
     model.fit(
-        [easy_x_train, hard_x_train],
-        [easy_y_train, hard_y_train],
-        epochs = 100,
+        [easy_x_train[:1000], hard_x_train[:1000]],
+        [easy_y_train[:1000], hard_y_train[:1000]],
+        epochs = 1,
         batch_size = 512,
         callbacks = [callback, mann_tboard],
         validation_split = 0.2,
@@ -154,6 +155,8 @@ if __name__ == '__main__':
     )
 
     model = mann.utils.utils.remove_layer_masks(model)
+    model.summary()
+    model.save('multitask_model.h5')
 
     easy_preds, hard_preds = model.predict([easy_x_test, hard_x_test])
     easy_preds = easy_preds.argmax(axis = 1)
@@ -167,3 +170,59 @@ if __name__ == '__main__':
     print('Hard Performance:')
     print(confusion_matrix(hard_y_test, hard_preds))
     print(classification_report(hard_y_test, hard_preds))
+
+    input1 = tf.keras.layers.Input(easy_x_train.shape[1:])
+    input2 = tf.keras.layers.Input(hard_x_train.shape[1:])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[2])([input1, input2])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[3])(x)
+    sel1 = mann.layers.SelectorLayer(0)(x)
+    sel2 = mann.layers.SelectorLayer(1)(x)
+    pool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel1)
+    pool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel2)
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[8])([sel1, sel2])
+    x = mann.layers.SparseMultiConv.from_layer(model.layers[9])(x)
+    sel1 = mann.layers.SelectorLayer(0)(x)
+    sel2 = mann.layers.SelectorLayer(1)(x)
+    pool1 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel1)
+    pool2 = tf.keras.layers.MaxPool2D(
+        pool_size = 2,
+        strides = 1,
+        padding = 'valid'
+    )(sel2)
+    flat1 = tf.keras.layers.Flatten()(pool1)
+    flat2 = tf.keras.layers.Flatten()(pool2)
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[16])([flat1, flat2])
+    x = mann.layers.SparseMultiDense.from_layer(model.layers[17])(x)
+    output_layer = mann.layers.SparseMultiDense.from_layer(model.layers[18])(x)
+    model = tf.keras.models.Model(
+        [input1, input2],
+        output_layer
+    )
+
+    easy_preds, hard_preds = model.predict([easy_x_test, hard_x_test])
+    easy_preds = easy_preds.argmax(axis = 1)
+    hard_preds = hard_preds.argmax(axis = 1)
+
+    print('Sparse Easy Performance:')
+    print(confusion_matrix(easy_y_test, easy_preds))
+    print(classification_report(easy_y_test, easy_preds))
+    print('\n')
+
+    print('Sparse Hard Performance:')
+    print(confusion_matrix(hard_y_test, hard_preds))
+    print(classification_report(hard_y_test, hard_preds))
+
+    with open('sparse_model.pkl', 'wb') as f:
+        pickle.dump(model, f)

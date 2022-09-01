@@ -40,12 +40,22 @@ model = tf.keras.models.Model([token_input, pos_input], output_layer)
 model = mann.utils.add_layer_masks(model)
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
-# Fit the model initially
+callback = tf.keras.callbacks.EarlyStopping(
+    min_delta = 0.004,
+    patience = 3,
+    restore_best_weights = True
+)
+
+
+
+# Fit the model
 model.fit(
     [x_train, x_train_positions],
     y_train,
     batch_size = 256,
     epochs = 2,
-    validation_split = 0.2
+    validation_split = 0.2,
+    epochs = 100,
+    callbacks = [callback]
 )
 model.summary()

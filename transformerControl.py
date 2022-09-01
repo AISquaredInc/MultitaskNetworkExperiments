@@ -54,7 +54,7 @@ model.fit(
     [x_train, x_train_positions],
     y_train,
     batch_size = 256,
-    epochs = 1,
+    epochs = 100,
     validation_split = 0.2,
     callbacks = [callback]
 )

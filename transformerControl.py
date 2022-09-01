@@ -2,6 +2,8 @@ import beyondml.tflow as mann
 import tensorflow as tf
 import numpy as np
 
+from sklearn.metrics import confusion_matrix, classification_report
+
 vocab_size = 30000
 maxlen = 512
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.reuters.load_data(num_words = vocab_size)
@@ -37,7 +39,6 @@ x = tf.keras.layers.Dropout(dropout)(x)
 output_layer = tf.keras.layers.Dense(np.unique(y_train).shape[0], activation = 'softmax')(x)
 
 model = tf.keras.models.Model([token_input, pos_input], output_layer)
-model = mann.utils.add_layer_masks(model)
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
 callback = tf.keras.callbacks.EarlyStopping(
@@ -46,7 +47,7 @@ callback = tf.keras.callbacks.EarlyStopping(
     restore_best_weights = True
 )
 
-
+model.summary()
 
 # Fit the model
 model.fit(
@@ -55,7 +56,15 @@ model.fit(
     batch_size = 256,
     epochs = 2,
     validation_split = 0.2,
-    epochs = 100,
     callbacks = [callback]
 )
-model.summary()
+
+preds = model.predict([x_test, x_test_positions]).argmax(axis = 1)
+
+print('Results\n')
+print('Confusion Matrix:')
+print(confusion_matrix(y_test, preds))
+print('\n\n')
+print('Classification Report:')
+print(classification_report(y_test, preds))
+model.save('transformer_control_model.h5')

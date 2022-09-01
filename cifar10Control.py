@@ -2,7 +2,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import click
-import mann
+import beyondml.tflow as mann
 import os
 
 def build_model(output_shape):
@@ -78,7 +78,7 @@ def build_model(output_shape):
         
 @click.command()
 @click.option('--batch-size', '-b', type = int, default = 256)
-def main(batch_size)
+def main(batch_size):
 
     model = build_model(10)
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()

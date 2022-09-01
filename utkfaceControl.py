@@ -2,7 +2,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import numpy as np
 import click
-import mann
+import beyondml.tflow as mann
 import os
 
 def data_generator(

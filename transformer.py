@@ -45,7 +45,7 @@ model.fit(
     [x_train, x_train_positions],
     y_train,
     batch_size = 256,
-    epochs = 20,
+    epochs = 2,
     validation_split = 0.2
 )
 model.summary()

@@ -4,6 +4,8 @@ import numpy as np
 
 from sklearn.metrics import confusion_matrix, classification_report
 
+np.set_printoptions(np.inf)
+
 vocab_size = 30000
 maxlen = 512
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.reuters.load_data(num_words = vocab_size)
@@ -56,7 +58,8 @@ model.fit(
     batch_size = 256,
     epochs = 100,
     validation_split = 0.2,
-    callbacks = [callback]
+    callbacks = [callback],
+    verbose = 0
 )
 
 preds = model.predict([x_test, x_test_positions]).argmax(axis = 1)

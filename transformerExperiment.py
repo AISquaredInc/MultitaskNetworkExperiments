@@ -43,7 +43,7 @@ output_layer = tf.keras.layers.Dense(np.unique(y_train).shape[0], activation = '
 model = tf.keras.models.Model([token_input, pos_input], output_layer)
 model = mann.utils.add_layer_masks(model)
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
-model = mann.utils.prune_model(
+model = mann.utils.mask_model(
     model,
     90,
     x = [x_train[:100], x_train_positions[:100]],

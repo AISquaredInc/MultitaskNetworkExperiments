@@ -4,7 +4,7 @@ import numpy as np
 
 from sklearn.metrics import confusion_matrix, classification_report
 
-np.set_printoptions(np.inf)
+np.set_printoptions(threshold = np.inf)
 
 vocab_size = 30000
 maxlen = 512

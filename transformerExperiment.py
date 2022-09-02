@@ -70,6 +70,8 @@ model.fit(
     verbose = 0
 )
 
+model = mann.utils.remove_layer_masks(model)
+
 preds = model.predict([x_test, x_test_positions]).argmax(axis = 1)
 
 print('Results\n')

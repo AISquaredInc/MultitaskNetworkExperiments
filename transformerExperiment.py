@@ -45,7 +45,7 @@ model = mann.utils.add_layer_masks(model)
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 model = mann.utils.mask_model(
     model,
-    90,
+    80,
     x = [x_train[:100], x_train_positions[:100]],
     y = y_train[:100]
 )

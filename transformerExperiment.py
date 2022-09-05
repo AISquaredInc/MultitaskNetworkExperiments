@@ -43,12 +43,19 @@ output_layer = tf.keras.layers.Dense(np.unique(y_train).shape[0], activation = '
 model = tf.keras.models.Model([token_input, pos_input], output_layer)
 model = mann.utils.add_layer_masks(model)
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+model.fit(
+    [x_train, x_train_positions],
+    y_train,
+    batch_size = 256,
+    epochs = 2,
+    validation_split = 0.2,
+    verbose = 0
+)
 model = mann.utils.mask_model(
     model,
-    70,
-    x = [x_train[:100], x_train_positions[:100]],
-    y = y_train[:100]
-)
+    90,
+    method = 'magnitude'
+    )
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
 callback = tf.keras.callbacks.EarlyStopping(

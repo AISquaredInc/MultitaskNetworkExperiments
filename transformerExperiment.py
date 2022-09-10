@@ -54,7 +54,9 @@ model.fit(
 model = mann.utils.mask_model(
     model,
     90,
-    method = 'magnitude'
+    method = 'gradients',
+    x = [x_train[:100], x_train_positions[:100]],
+    y = y_train[:100]
     )
 model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
 
